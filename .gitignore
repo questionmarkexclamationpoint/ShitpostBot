@@ -1,0 +1,12 @@
+data/*
+!data/checkpoints/
+!data/text/
+
+data/text/*
+!data/checkpoints/.gitkeep
+
+data/checkpoints/*
+!data/text/.gitkeep
+
+logs/*
+!logs/.gitkeep
