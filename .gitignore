@@ -1,11 +1,14 @@
 data/*
 !data/checkpoints/
 !data/text/
-
-data/text/*
-!data/checkpoints/.gitkeep
+!data/default_settings.yml
 
 data/checkpoints/*
+!data/checkpoints/.gitkeep
+!data/checkpoints/lotr/
+data/checkpoints/lotr/lotr.txt
+
+data/text/*
 !data/text/.gitkeep
 
 logs/*

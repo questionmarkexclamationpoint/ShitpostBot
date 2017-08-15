@@ -1,0 +1,13 @@
+---
+:off:
+  :checkpoint: lotr
+  :temperature: 1.0
+  :reply: 0.0
+  :mention: false
+  :think: 0.0
+:on:
+  :checkpoint: lotr
+  :temperature: 1.0
+  :reply: 1.0
+  :mention: true
+  :think: 0.01
