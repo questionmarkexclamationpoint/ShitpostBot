@@ -8,7 +8,7 @@ module Util
     end
   end
   
-  def time_in_words(time)
+  def self.time_in_words(time)
     days = (time / 86_400).to_i
     time -= days * 86_400
     hours = (time / 3_600).to_i
