@@ -9,7 +9,7 @@ module ShitpostBot
           server.text_channels.each do |channel|
             STATS.active_channels += 1 if channel.active
             STATS.checkpoint_popularity[channel.checkpoint] ||= 0
-            STATS.checkpoint_popularity[channel.checkpoint] += 1
+            STATS.checkpoint_popularity[channel.checkpoint] += 1 if channel.active
           end
         end
       end
