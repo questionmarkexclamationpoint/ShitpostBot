@@ -11,13 +11,16 @@ module ShitpostBot
         #event.channel.send_message("This command is disabled for now. Please contact the bot's creator and have them train the bot for you. Sorry for the hassle!")
         #return # when this command can be used reasonably by an idiot it should be reinstated
         size ||= 128
-        size = size.to_i.clamp(32, 256)
+        size = size.to_i
+        size = size.clamp(32, 256) unless event.user.id == CONFIG.owner_id
         layers ||= 2
-        layers = layers.to_i.clamp(1, 3)
+        layers = layers.to_i
+        layers = layers.clamp(1, 3) unless event.user.id == CONFIG.owner_id
         dropout ||= 0.0
         dropout = dropout.to_f.clamp(0.0, 0.9)
         epochs ||= 50
-        epochs = epochs.to_i.clamp(1, 500)
+        epochs = epochs.to_i
+        epochs = epochs.clamp(1, 500) unless event.user.id == CONFIG.owner_id
         name ||= event.channel.name
         name.gsub!(/[^0-9A-Za-z.\-_]/, '')
         event.channel.start_typing
