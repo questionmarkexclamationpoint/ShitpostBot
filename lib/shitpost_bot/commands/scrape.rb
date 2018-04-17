@@ -32,7 +32,7 @@ module ShitpostBot
               end
             rescue Discordrb::Errors::NoPermission
               event << "No permission on #{server.name}::#{channel.name}, skipping"
-            rescue Exception => e
+            rescue => e
               event << "Encountered exception on #{server.name}::#{channel.name}, skipping"
               event << "Exception was: #{e}"
             end

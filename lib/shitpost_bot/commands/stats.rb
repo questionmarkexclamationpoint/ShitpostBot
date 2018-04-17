@@ -11,6 +11,10 @@ module ShitpostBot
         event << "\nServers: #{STATS.servers}"
         event << "Posts made: #{STATS.posts_made}"
         event << "Active channels: #{STATS.active_channels}"
+        event << 'Checkpoint popularity:'
+        STATS.checkpoint_popularity.each do |key, value|
+          event << "  #{key}: #{value}"
+        end
         event << "Times mentioned: #{STATS.mentions}"
         event << "Uptime: #{STATS.uptime}"
         event << "Ping: #{ping}ms"
