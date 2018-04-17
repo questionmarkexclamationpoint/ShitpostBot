@@ -15,7 +15,7 @@ module ShitpostBot
         channels.each do |channel|
           channel.temperature = temperature
         end
-        event.channel.send_message('Settings updated!')
+        event << 'Settings updated!'
       end
     end
   end

@@ -13,7 +13,7 @@ module ShitpostBot
         output = Posting.get_reply(text, event.channel)
         output[0] = start_text + output[0].to_s
         output.each do |o|
-          event.channel.send_message(o)
+          event << o
         end
         nil
       end

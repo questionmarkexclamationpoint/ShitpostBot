@@ -19,7 +19,7 @@ module ShitpostBot
           end
           text += "\n"
         end
-        event.channel.send_message(text)
+        event << text
       end
     end
   end

@@ -23,7 +23,7 @@ module ShitpostBot
           end
           channel.reply = frequency
         end
-        event.channel.send_message('Settings updated!')
+        event << 'Settings updated!'
       end
     end
   end

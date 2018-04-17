@@ -11,8 +11,9 @@ module ShitpostBot
         event.channel.start_typing
         channels = Processing.process_channel_parameters(channels, event.channel)
         return if channels.empty?
-        unless File.exists?("#{Dir.pwd}/data/checkpoints/#{checkpoint}/")
-          event.channel.send_message("The given checkpoint doesn\'t exist. Try the `#{ShitpostBot::BOT.prefix}checkpoints` command.")
+        path = "#{Dir.pwd}/data/checkpoints/#{checkpoint}/"
+        unless File.exists?(path) && File.exists?(path + checkpoint + '.t7') && File.exists?(path + checkpoint + '_processed.json')
+          event << "The given checkpoint doesn\'t exist. Try the `#{ShitpostBot::BOT.prefix}checkpoints` command."
           return
         end
         channels.each do |channel|
@@ -22,7 +23,7 @@ module ShitpostBot
           STATS.checkpoint_popularity[checkpoint] += 1
           channel.checkpoint = checkpoint
         end
-        event.channel.send_message('Settings updated!')
+        event 'Settings updated!'
       end
     end
   end

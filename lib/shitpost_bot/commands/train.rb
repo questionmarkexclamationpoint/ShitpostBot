@@ -21,41 +21,41 @@ module ShitpostBot
         name ||= event.channel.name
         event.channel.start_typing
         if File.exists?("#{Dir.pwd}/data/checkpoints/name")
-          event.channel.send_message('There is already a checkpoint with this name!')
+          event << 'There is already a checkpoint with this name!'
           return
         end
         channels = Processing.process_channel_parameters(channels, event.channel)
         return if channels.empty?
-        Processing.write_channels_to_file(channels, "#{Dir.pwd}/data/checkpoints/#{name}.txt")
+        Processing.write_channels_to_file(channels, "#{Dir.pwd}/data/checkpoints/#{name}/#{name}.txt")
         Thread.new do
-          TorchRnn.preprocess(input_txt: "#{Dir.pwd}/data/checkpoints/#{name}.txt", 
-                              output_h5: "#{Dir.pwd}/data/checkpoints/#{name}_processed.h5",
-                              output_json: "#{Dir.pwd}/data/checkpoints/#{name}_processed.json",
+          TorchRnn.preprocess(input_txt: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}.txt", 
+                              output_h5: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}_processed.h5",
+                              output_json: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}_processed.json",
                               quiet: true)
-          a = TorchRnn.train(input_h5: "#{Dir.pwd}/data/checkpoints/#{name}_processed.h5",
-                         input_json: "#{Dir.pwd}/data/checkpoints/#{name}_processed.json",
+          a = TorchRnn.train(input_h5: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}_processed.h5",
+                         input_json: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}_processed.json",
                          rnn_size: size,
                          num_layers: layers,
                          dropout: dropout,
                          max_epochs: epochs,
                          print_every: 1,
                          checkpoint_every: 0,
-                         checkpoint_name: "#{Dir.pwd}/data/checkpoints/#{name}",
+                         checkpoint_name: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}",
                          gpu: CONFIG.gpu,
                          gpu_backend: CONFIG.gpu_backend)
           event.channel.start_typing
-          files = Dir.entries("#{Dir.pwd}/data/checkpoints/")
+          files = Dir.entries("#{Dir.pwd}/data/checkpoints/#{name}/")
           r = Regexp.new(name + '_\d*\.(json|t7)')
           files.select! do |file|
             file =~ r
           end
           files.each do |file|
             type = file.rpartition('.')[2]
-            File.rename("#{Dir.pwd}/data/checkpoints/#{file}", "#{Dir.pwd}/data/checkpoints/#{name}.#{type}")
+            File.rename("#{Dir.pwd}/data/checkpoints/#{name}/#{file}", "#{Dir.pwd}/data/checkpoints/#{name}/#{name}.#{type}")
           end
-          event.channel.send_message('Done training!')
+          event << 'Done training!'
         end
-        event.channel.send_message('I\'ve begun training! I\'ll message you when I\'m done.')
+        event << 'I\'ve begun training! I\'ll message you when I\'m done.'
       end
     end
   end

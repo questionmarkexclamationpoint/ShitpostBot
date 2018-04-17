@@ -11,9 +11,9 @@ module ShitpostBot
         return if channels.empty?
         if event.user.id == CONFIG.owner_id
           Processing.full_write_channels_to_file(channels, "#{Dir.pwd}/data/text/#{event.channel.name}.json")
-          event.channel.send_message('Done reading!')
+          event << 'Done reading!'
         else
-          event.channel.send_message('Sorry, this command is only available to the owner of the bot.')
+          event << 'Sorry, this command is only available to the owner of the bot.'
         end
       end
     end

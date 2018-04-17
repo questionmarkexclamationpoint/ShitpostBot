@@ -22,7 +22,7 @@ module ShitpostBot
                 end
                 last_message = message
               end
-              File.open('#{Dir.pwd}/data/text/#{channel.id}_conversation.yml', 'w') do |f|
+              File.open("#{Dir.pwd}/data/text/#{channel.id}_conversation.yml", 'w') do |f|
                 f << YAML.dump(JSON.parse(JSON.dump(conversationalized_log)))
               end
               if verbose
@@ -31,12 +31,12 @@ module ShitpostBot
                 end
               end
             rescue Discordrb::Errors::NoPermission
-              event.channel.send_message("No permission on #{server.name}::#{channel.name}, skipping")
+              event << "No permission on #{server.name}::#{channel.name}, skipping"
             rescue Exception => e
-              event.channel.send_message("Encountered exception on #{server.name}::#{channel.name}, skipping")
-              event.channel.send_message("Exception was: #{e}")
+              event << "Encountered exception on #{server.name}::#{channel.name}, skipping"
+              event << "Exception was: #{e}"
             end
-            event.channel.send_message("Done scraping!")
+            event << 'Done scraping!'
           end
         end
       end

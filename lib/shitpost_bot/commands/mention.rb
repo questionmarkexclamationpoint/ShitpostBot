@@ -27,7 +27,7 @@ module ShitpostBot
           end
           channel.mention = turn_on
         end
-        event.channel.send_message('Settings updated!')
+        event << 'Settings updated!'
       end
     end
   end

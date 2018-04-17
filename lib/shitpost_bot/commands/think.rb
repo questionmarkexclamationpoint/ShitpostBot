@@ -22,7 +22,7 @@ module ShitpostBot
           end
           channel.think = frequency
         end
-        event.channel.send_message('Settings updated!')    
+        event << 'Settings updated!'
       end
     end
   end
