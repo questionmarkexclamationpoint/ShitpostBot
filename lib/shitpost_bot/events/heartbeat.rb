@@ -9,7 +9,7 @@ module ShitpostBot
               channel.start_typing
               post = Posting.get_reply('§ ¥', channel)
               post.each do |p|
-                channel.send_message(p)
+                channel.send_message(p) unless p.empty?
               end
               nil
             end
