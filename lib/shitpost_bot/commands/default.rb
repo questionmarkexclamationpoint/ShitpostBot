@@ -23,7 +23,7 @@ module ShitpostBot
           channel.config = (turn_on ? ShitpostBot::ChannelConfig.default_settings[:on] : channel.config = ShitpostBot::ChannelConfig.default_settings[:off])
           channel.checkpoint = checkpoint
         end
-        event << "All settings have been #{turn_on ? 'turned on to their defaults' : 'disabled'} for #{channels.length > 1 ? 'these channels' : 'this channel'}."
+        event << "All settings have been #{turn_on ? 'turned on to their defaults' : 'disabled'} for #{channels.length == 1 ? 'this channel' : 'these channels'}."
       end
     end
   end

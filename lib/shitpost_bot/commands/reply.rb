@@ -23,7 +23,7 @@ module ShitpostBot
           end
           channel.reply = frequency
         end
-        event << "I'll now reply to #{frequency * 100}\% of posts in #{channels.length > 1 ? 'this channel' : 'these channels'}!"
+        event << "I'll now reply to #{frequency * 100}\% of posts in #{channels.length == 1 ? 'this channel' : 'these channels'}!"
       end
     end
   end

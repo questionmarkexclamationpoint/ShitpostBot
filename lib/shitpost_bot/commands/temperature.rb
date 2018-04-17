@@ -15,7 +15,7 @@ module ShitpostBot
         channels.each do |channel|
           channel.temperature = temperature
         end
-        event << "I am now #{temperature * 100}\% creative in #{channels.length > 1 ? 'this channel' : 'these channels'}!"
+        event << "I am now #{temperature * 100}\% creative in #{channels.length == 1 ? 'this channel' : 'these channels'}!"
       end
     end
   end

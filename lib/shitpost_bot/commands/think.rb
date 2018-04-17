@@ -22,7 +22,7 @@ module ShitpostBot
           end
           channel.think = frequency
         end
-        event << "I will now post about #{frequency * 1.5} times per minute in #{channels.length > 1 ? 'this channel' : 'these channels'}!"
+        event << "I will now post about #{frequency * 1.5} times per minute in #{channels.length == 1 ? 'this channel' : 'these channels'}!"
       end
     end
   end

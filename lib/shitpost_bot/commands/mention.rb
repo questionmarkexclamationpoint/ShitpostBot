@@ -28,7 +28,7 @@ module ShitpostBot
           end
           channel.mention = turn_on
         end
-        event << "Mention has been #{turn_on ? 'enabled' : 'disabled'} for #{channels.length > 1 ? 'these channels' : 'this channel'}."
+        event << "Mention has been #{turn_on ? 'enabled' : 'disabled'} for #{channels.length == 1 ? 'this channel' : 'these channels'}."
       end
     end
   end
