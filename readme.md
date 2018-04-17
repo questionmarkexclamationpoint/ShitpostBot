@@ -17,6 +17,8 @@ todo
     - `train`
     - `read`
     - `readall`
+    - `fullreadall`
+    - `scrape`
 - settings
     - `checkpoint`
     - `reply`
@@ -31,7 +33,12 @@ todo
     - `finish`
 ## To-Do / Upcoming Features
 - finish this readme
-- get thinking working
 - figure out a solution for word-rnn-tensorflow (since it uses so much vram)
 - add symbols (an unused character represents a user / channel / emoji)
 - once symbols are done, add imitation (bot can imitate a user) and mentioning (bot can mention a user)
+
+# Acknowledgments
+- [Andre Karpathy](https://github.com/karpathy) for [char-rnn](https://github.com/karpathy/char-rnn)
+- [Justin Johnson](https://github.com/jcjohnson) for [torch-rnn](https://github.com/jcjohnson/torch-rnn)
+- [hunkim](https://github.com/hunkim) for [word-rnn-tensorflow](https://github.com/hunkim/word-rnn-tensorflow)
+- [Kristupas Savickas](https://github.com/KristupasSavickas), because I got the structure, and some reused code, from [sapphire_bot](https://github.com/KristupasSavickas/sapphire_bot)
