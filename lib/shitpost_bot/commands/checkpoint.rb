@@ -2,7 +2,7 @@ module ShitpostBot
   module Commands
     module Checkpoint
       extend Discordrb::Commands::CommandContainer
-      command([:checkpoint, :c]
+      command([:checkpoint, :c],
               description: 'Changes the checkpoint for this channel to a given checkpoint.',
               usage: "#{ShitpostBot::BOT.prefix}[checkpoint|c] name [\#channel1 [\#channel2 [...]]]",
               required_permissions: [:manage_server],

@@ -3,7 +3,7 @@ module ShitpostBot
   class Stats
     include StoreData
 
-    attr_reader :servers, :users, :uptime
+    attr_reader :servers, :uptime
 
     def initialize
       @file = "#{Dir.pwd}/data/stats.yml"
@@ -16,6 +16,7 @@ module ShitpostBot
         @stats[:posts_made] = 0
         @stats[:checkpoint_popularity] = {}
         @stats[:active_channels] = 0
+        @stats[:mentions] = 0
       end
 
       @uptime = 0

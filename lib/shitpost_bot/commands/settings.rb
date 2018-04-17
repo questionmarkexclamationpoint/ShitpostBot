@@ -2,7 +2,7 @@ module ShitpostBot
   module Commands
     module Settings
       extend Discordrb::Commands::CommandContainer
-      command(:settings, 
+      command([:settings, :s], 
               description: '',
               usage: "#{BOT.prefix}settings",
               help_available: true

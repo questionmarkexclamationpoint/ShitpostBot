@@ -8,9 +8,9 @@ module ShitpostBot
               max_args: 0,
               help_available: true
               ) do |event|
-        event << 'Author: ?! (<@178950134263054337>)'
+        event << 'Author: ?!#9874 (<@178950134263054337>)'
         event << "Owner: <@#{CONFIG.owner_id}>"
-        event << 'Github: <github-url>'
+        event << 'Github: https://github.com/questionmarkexclamationpoint/ShitpostBot'
         event << "Version: #{VERSION}"
       end
     end

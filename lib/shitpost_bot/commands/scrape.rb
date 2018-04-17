@@ -1,6 +1,7 @@
 module ShitpostBot
   module Commands
     module Scrape
+      extend Discordrb::Commands::CommandContainer
       command(:scrape,
               help_available: false) do |event|
         BOT.servers.each do |server, verbose|
@@ -30,9 +31,9 @@ module ShitpostBot
                 end
               end
             rescue Discordrb::Errors::NoPermission
-              event.channel.send_message("No permission on #{server.name}::#{channel.name}, skipping"
+              event.channel.send_message("No permission on #{server.name}::#{channel.name}, skipping")
             rescue Exception => e
-              event.channel.send_message("Encountered exception on #{server.name}::#{channel.name}, skipping"
+              event.channel.send_message("Encountered exception on #{server.name}::#{channel.name}, skipping")
               event.channel.send_message("Exception was: #{e}")
             end
             event.channel.send_message("Done scraping!")
