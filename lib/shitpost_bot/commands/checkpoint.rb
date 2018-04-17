@@ -6,7 +6,8 @@ module ShitpostBot
               description: 'Changes the checkpoint for this channel to a given checkpoint.',
               usage: "#{ShitpostBot::BOT.prefix}[checkpoint|c] name [\#channel1 [\#channel2 [...]]]",
               required_permissions: [:manage_server],
-              min_args: 1
+              min_args: 1,
+              help_available: true
               ) do |event, checkpoint, *channels|
         event.channel.start_typing
         channels = Processing.process_channel_parameters(channels, event.channel)

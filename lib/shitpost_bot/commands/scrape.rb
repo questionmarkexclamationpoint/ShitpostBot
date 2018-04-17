@@ -3,9 +3,10 @@ module ShitpostBot
     module Scrape
       extend Discordrb::Commands::CommandContainer
       command(:scrape,
-              help_available: false) do |event|
-        BOT.servers.each do |server, verbose|
-          verbose = (verbose == 'true' || verbose.to_i == 1) ? true : false
+              help_available: false,
+              max_args: 1) do |event, verbose|
+        BOT.servers.each do |id, server|
+          verbose = (verbose.is_a?(String) && (verbose == 'true' || verbose.to_i == 1)) ? true : false
           server.channels.each do |channel|
             begin
               log = channel.full_history(event.channel)

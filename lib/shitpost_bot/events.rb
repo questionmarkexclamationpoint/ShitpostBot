@@ -5,7 +5,8 @@ module ShitpostBot
     @events = [
       Heartbeat,
       Mention,
-      Message
+      Message,
+      Ready
     ]
 
     def self.include!

@@ -2,7 +2,7 @@ module ShitpostBot
   module Commands
     module Temperature
       extend Discordrb::Commands::CommandContainer
-      command([:temperature], 
+      command([:temperature, :temp], 
               description: '',
               usage: "#{BOT.prefix}[temperature|temp] [0.1 - 1.0]",
               arg_types: [Float],

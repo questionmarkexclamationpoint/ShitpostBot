@@ -2,10 +2,11 @@ module ShitpostBot
   module Commands
     module Disable
       extend Discordrb::Commands::CommandContainer
-      command(:disable, 
-              description: 'Disables all posting for this channel.',
+      command([:disable, :off],
+              description: 'Disables all posting for this/these channel(s).',
               usage: "#{ShitpostBot::BOT.prefix}disable  [\#channel1 [\#channel2 [...]]]",
-              required_permissions: [:manage_server]
+              required_permissions: [:manage_server],
+              help_available: true
               ) do |event, *channels|
         event.channel.start_typing
         channels = Processing.process_channel_parameters(channels, event.channel)

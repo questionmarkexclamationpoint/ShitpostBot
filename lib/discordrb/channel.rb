@@ -58,16 +58,17 @@ module Discordrb
       result.reverse
     end
     
-    def full_history(postback_channel)
+    def full_history(postback_channel = nil)
       h = history(100)
       result = []
+      i = h.length
       while h.length > 0
         result += h
         h = history(100, result.last.id)
-        i = history.length
+        i += h.length
         postback_channel.send_message("Processed #{i} messages on #{server.name}::#{name}...") if i % 1000 == 0 && !postback_channel.nil?
       end
-      postback_channel.send_message("Done processing. Processed #{history.length} messages on #{server.name}::#{name} in total.") unless postback_channel.nil?
+      postback_channel.send_message("Done processing. Processed #{i} messages on #{server.name}::#{name} in total.") unless postback_channel.nil?
       result.reverse
     end
     

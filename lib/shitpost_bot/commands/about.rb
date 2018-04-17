@@ -2,7 +2,7 @@ module ShitpostBot
   module Commands
     module About
       extend Discordrb::Commands::CommandContainer
-      command(:about, 
+      command([:about, :a],
               description: 'Shows some information about me.',
               usage: "#{BOT.prefix}about",
               max_args: 0,

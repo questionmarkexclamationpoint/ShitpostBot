@@ -7,7 +7,7 @@ module ShitpostBot
               usage: "#{BOT.prefix}reply [0.0 - 1.0]",
               help_available: true,
               required_permissions: [:manage_server],
-              arg_types: [Float]
+              arg_types: [Float],
               ) do |event, frequency, *channels|
         event.channel.start_typing
         channels = Processing.process_channel_parameters(channels, event.channel)

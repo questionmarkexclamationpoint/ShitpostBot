@@ -2,7 +2,7 @@ module ShitpostBot
   module Commands
     module Finish
       extend Discordrb::Commands::CommandContainer
-      command(:finish, 
+      command([:finish, :f],
               description: 'Finishes the thought started in the given text.',
               usage: "#{BOT.prefix}finish text",
               min_args: 1

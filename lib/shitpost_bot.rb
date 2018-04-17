@@ -58,7 +58,7 @@ module ShitpostBot
   Events.include!
   
   at_exit do
-    LOGGER.info 'Saving files and deleting songs before exiting...'
+    LOGGER.info 'Saving files before exiting...'
     STATS.save
     ChannelConfig.save
     #ChannelSymbols.save
@@ -68,21 +68,6 @@ module ShitpostBot
   LOGGER.info "Oauth url: #{BOT.invite_url}"
   LOGGER.info 'Use ctrl+c to safely stop the bot.'
   BOT.run(:async)
-
-  STATS.active_channels = 0
-  STATS.checkpoint_popularity = {}
-  BOT.servers.each do |server| 
-    server.text_channels.each do |channel|
-      LOGGER.debug(channel.name)
-      LOGGER.debug(channel.active)
-      LOGGER.debug(channel.checkpoint)
-      LOGGER.debug(STATS.active_channels)
-      LOGGER.debug(STATS.checkpoint_popularity)
-      STATS.active_channels += 1 if channel.active
-      STATS.checkpoint_popularity[channel.checkpoint] ||= 0
-      STATS.checkpoint_popularity[channel.checkpoint] += 1
-    end
-  end
 
   loop do
     STATS.update

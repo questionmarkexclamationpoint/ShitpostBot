@@ -4,7 +4,7 @@ module Util
       stdout, stderr, status = Open3.capture3(*cmd)
       stdout.slice!(0..-(1 + $/.size)) # strip trailing eol
     rescue => e
-      LOGGER.error(e)
+      LOGGER.warn(e)
     end
   end
 end

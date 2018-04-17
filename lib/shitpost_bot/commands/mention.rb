@@ -5,7 +5,8 @@ module ShitpostBot
       command([:mention, :m], 
               description: 'Enables/disables responses in the channel when the bot is mentioned. If mention is enabled on some/all of the channels given, all given channels will have mention disabled. If replies are also enabled, the bot will *not* double post.',
               usage: "#{BOT.prefix}[mention|m] [\#channel1 [\#channel2 [...]]]",
-              required_permissions: [:manage_server]
+              required_permissions: [:manage_server],
+              help_available: true
               ) do |event, *channels|
         event.channel.start_typing
         channels = Processing.process_channel_parameters(channels, event.channel)
