@@ -13,13 +13,14 @@ module ShitpostBot
                                   n: 1000,
                                   prime: text)
       end
-      puts "Input: #{text}"
       response = response.partition(text)[2]
       response = response.partition(text)[2] if channel.word_checkpoint?
       if response.include? '¥'
         response = response.partition('¥')[0]
       end
-      puts "Response: #{response}"
+      Logger.info("Posting in #{channel.server.name}::#{channel.name}:\n" +
+                  "  Input: #{text}\n" +
+                  "  Output: #{response}\n")
       if response.include? '§'
         output = []
         until response.chomp.empty?

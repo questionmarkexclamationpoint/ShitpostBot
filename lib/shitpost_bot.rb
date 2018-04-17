@@ -69,6 +69,21 @@ module ShitpostBot
   LOGGER.info 'Use ctrl+c to safely stop the bot.'
   BOT.run(:async)
 
+  STATS.active_channels = 0
+  STATS.checkpoint_popularity = {}
+  BOT.servers.each do |server| 
+    server.text_channels.each do |channel|
+      LOGGER.debug(channel.name)
+      LOGGER.debug(channel.active)
+      LOGGER.debug(channel.checkpoint)
+      LOGGER.debug(STATS.active_channels)
+      LOGGER.debug(STATS.checkpoint_popularity)
+      STATS.active_channels += 1 if channel.active
+      STATS.checkpoint_popularity[channel.checkpoint] ||= 0
+      STATS.checkpoint_popularity[channel.checkpoint] += 1
+    end
+  end
+
   loop do
     STATS.update
     ChannelConfig.save
