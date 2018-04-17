@@ -12,7 +12,15 @@ module ShitpostBot
         event.channel.start_typing
         channels = Processing.process_channel_parameters(channels, event.channel)
         return if channels.empty?
+        frequency = frequency.to_f.clamp(0.0, 1.0)
         channels.each do |channel|
+          if frequency > 0
+            unless channel.active
+              STATS.active_channels += 1
+            end
+          elsif channel.reply > 0 && !channel.mention && channel.think == 0
+            STATS.active_channels -= 1
+          end
           channel.reply = frequency
         end
         event.channel.send_message('Settings updated!')

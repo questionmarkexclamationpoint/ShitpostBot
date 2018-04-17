@@ -8,40 +8,50 @@ module ShitpostBot
               required_permissions: [:manage_server],
               arg_types: [Integer, Integer, Float, Integer]
               ) do |event, size, layers, dropout, epochs, name, *channels|
+        #event.channel.send_message("This command is disabled for now. Please contact the bot's creator and have them train the bot for you. Sorry for the hassle!")
+        #return # when this command can be used reasonably by an idiot it should be reinstated
         size ||= 128
+        size = size.to_i.clamp(32, 256)
         layers ||= 2
+        layers = layers.to_i.clamp(1, 3)
         dropout ||= 0.0
+        dropout = dropout.to_f.clamp(0.0, 0.9)
         epochs ||= 50
+        epochs = epochs.to_i.clamp(1, 500)
         name ||= event.channel.name
         event.channel.start_typing
+        if File.exists?("#{Dir.pwd}/data/checkpoints/name")
+          event.channel.send_message('There is already a checkpoint with this name!')
+          return
+        end
         channels = Processing.process_channel_parameters(channels, event.channel)
         return if channels.empty?
-        ShitpostBot::Processing.write_channels_to_file(channels, "data/checkpoints/#{name}.txt")
+        Processing.write_channels_to_file(channels, "#{Dir.pwd}/data/checkpoints/#{name}.txt")
         Thread.new do
-          TorchRnn.preprocess(input_txt: "data/checkpoints/#{name}.txt", 
-                              output_h5: "data/checkpoints/#{name}_processed.h5",
-                              output_json: "data/checkpoints/#{name}_processed.json",
+          TorchRnn.preprocess(input_txt: "#{Dir.pwd}/data/checkpoints/#{name}.txt", 
+                              output_h5: "#{Dir.pwd}/data/checkpoints/#{name}_processed.h5",
+                              output_json: "#{Dir.pwd}/data/checkpoints/#{name}_processed.json",
                               quiet: true)
-          a = TorchRnn.train(input_h5: "data/checkpoints/#{name}_processed.h5",
-                         input_json: "data/checkpoints/#{name}_processed.json",
+          a = TorchRnn.train(input_h5: "#{Dir.pwd}/data/checkpoints/#{name}_processed.h5",
+                         input_json: "#{Dir.pwd}/data/checkpoints/#{name}_processed.json",
                          rnn_size: size,
                          num_layers: layers,
                          dropout: dropout,
                          max_epochs: epochs,
                          print_every: 1,
                          checkpoint_every: 0,
-                         checkpoint_name: "data/checkpoints/#{name}",
+                         checkpoint_name: "#{Dir.pwd}/data/checkpoints/#{name}",
                          gpu: CONFIG.gpu,
                          gpu_backend: CONFIG.gpu_backend)
           event.channel.start_typing
-          files = Dir.entries('data/checkpoints/')
+          files = Dir.entries("#{Dir.pwd}/data/checkpoints/")
           r = Regexp.new(name + '_\d*\.(json|t7)')
           files.select! do |file|
             file =~ r
           end
           files.each do |file|
             type = file.rpartition('.')[2]
-            File.rename("data/checkpoints/#{file}", "data/checkpoints/#{name}.#{type}")
+            File.rename("#{Dir.pwd}/data/checkpoints/#{file}", "#{Dir.pwd}/data/checkpoints/#{name}.#{type}")
           end
           event.channel.send_message('Done training!')
         end

@@ -12,7 +12,7 @@ module Discordrb
     end
     
     def write_to_file(filename)
-      history = all_history
+      history = full_history
       #outputing straight to the file, rather than processing the string and then outputing.
       #this is because appending to the file is *much* faster than appending to a string for very long strings.
       open(filename, 'w') do |file|
@@ -30,6 +30,13 @@ module Discordrb
             last_message = message
           end
         end
+      end
+    end
+    
+    def full_write_to_file(filename)
+      history = full_history
+      File.open(filename, 'w') do |file|
+        f << JSON.dump(history)
       end
     end
     
@@ -51,13 +58,16 @@ module Discordrb
       result.reverse
     end
     
-    def all_history
+    def full_history(postback_channel)
       h = history(100)
       result = []
       while h.length > 0
         result += h
         h = history(100, result.last.id)
+        i = history.length
+        postback_channel.send_message("Processed #{i} messages on #{server.name}::#{name}...") if i % 1000 == 0 && !postback_channel.nil?
       end
+      postback_channel.send_message("Done processing. Processed #{history.length} messages on #{server.name}::#{name} in total.") unless postback_channel.nil?
       result.reverse
     end
     
@@ -66,19 +76,23 @@ module Discordrb
     end
     
     def valid_characters
-      @valid_characters = ((checkpoint == @last_checkpoint) ? @valid_characters : JSON.parse(File.read("data/checkpoints/#{checkpoint}/#{checkpoint}_processed.json"), )['token_to_idx'].keys)
+      @valid_characters = ((checkpoint == @last_checkpoint) ? @valid_characters : JSON.parse(File.read("#{Dir.pwd}/data/checkpoints/#{checkpoint}/#{checkpoint}_processed.json"), )['token_to_idx'].keys)
       @last_valid_checkpoint = checkpoint
       @valid_characters
     end
     
     def word_checkpoint?
-      files = Dir["data/checkpoints/#{checkpoint}/*"]
-      files.include? "data/checkpoints/#{checkpoint}/input.txt"
+      files = Dir["#{Dir.pwd}/data/checkpoints/#{checkpoint}/*"]
+      files.include? "#{Dir.pwd}/data/checkpoints/#{checkpoint}/input.txt"
     end
     
     def torch_checkpoint?
-      files = Dir["data/checkpoints/#{checkpoint}/*"]
-      files.include? "data/checkpoints/#{checkpoint}/#{checkpoint}.t7"
+      files = Dir["#{Dir.pwd}/data/checkpoints/#{checkpoint}/*"]
+      files.include? "#{Dir.pwd}/data/checkpoints/#{checkpoint}/#{checkpoint}.t7"
+    end
+    
+    def active
+      mention || reply > 0 || think > 0
     end
         
     private

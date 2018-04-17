@@ -11,6 +11,7 @@ module ShitpostBot
         event.channel.start_typing
         channels = Processing.process_channel_parameters(channels, event.channel)
         return if channels.empty?
+        temperature = temperature.to_f.clamp(0.1, 1.0)
         channels.each do |channel|
           channel.temperature = temperature
         end

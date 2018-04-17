@@ -30,10 +30,13 @@ module ShitpostBot
   LOGGER.debug = true if debug
   require_relative 'shitpost_bot/store_data'
   require_relative 'shitpost_bot/config'
-  require_relative 'discordrb/channel'
-  require_relative 'discordrb/message'
+
+  Dir["#{File.dirname(__FILE__)}/discordrb/*.rb"].each do |file|
+    require file
+  end
 
   CONFIG = Config.new
+  
   
   require_relative 'util'
   require_relative 'torch_rnn'
@@ -49,14 +52,14 @@ module ShitpostBot
     require file
   end
   
-  #STATS = Stats.new
+  STATS = Stats.new
 
   Commands.include!
   Events.include!
   
   at_exit do
     LOGGER.info 'Saving files and deleting songs before exiting...'
-    #STATS.save
+    STATS.save
     ChannelConfig.save
     #ChannelSymbols.save
     exit!
@@ -67,9 +70,9 @@ module ShitpostBot
   BOT.run(:async)
 
   loop do
-    #STATS.update
+    STATS.update
     ChannelConfig.save
-    #STATS.save
+    STATS.save
     sleep(10)
   end
 end

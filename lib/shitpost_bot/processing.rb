@@ -12,7 +12,7 @@ module ShitpostBot
     def self.write_channels_to_file(channels, filename)
       history = []
       channels.each do |channel|
-        history += channel.all_history
+        history += channel.full_history
       end
       #outputing straight to the file, rather than processing the string and then outputing.
       #this is because appending to the file is *much* faster than appending to a string for very long strings.
@@ -25,27 +25,34 @@ module ShitpostBot
           unless content.empty?
             #file << np
             #file << nu unless last_message.user == message.user
-            file << '§'
-            file << '¥' unless last_message.user == message.user
+            file << ' § '
+            file << '¥ ' unless last_message.user == message.user
             file << content
             last_message = message
           end
         end
+        file << ' § ¥ '
+      end
+    end
+    def self.full_write_channels_to_file(channels, filename)
+      history = []
+      channels.each do |channel|
+        history += channel.full_history
+      end
+      File.open(filename, 'w') do |file|
+        f << JSON.dump(history)
       end
     end
     def self.process_channel_parameters(channels, home_channel)
-      if channels.empty?
-        channels = [home_channel]
-      else
-        channels.length.times do |i|
-          channels[i] = ShitpostBot::BOT.channel(channels[i][2..-2].to_i, event.server)
-          if channels[i].nil?
-            BOT.send_message(home_channel, 'You\'ve given a non-existant channel.')
-            return []
-          elsif channels[i].voice?
-            BOT.send_message(home_channel, 'This command only works with text channels.')
-            return []
-          end
+      return [home_channel] if channels.empty?
+      channels.length.times do |i|
+        channels[i] = ShitpostBot::BOT.channel(channels[i][2..-2].to_i, event.server)
+        if channels[i].nil?
+          BOT.send_message(home_channel, 'You\'ve given a non-existant channel.')
+          return []
+        elsif channels[i].voice?
+          BOT.send_message(home_channel, 'This command only works with text channels.')
+          return []
         end
       end
       channels

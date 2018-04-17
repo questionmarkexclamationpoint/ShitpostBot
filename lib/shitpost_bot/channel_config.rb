@@ -2,8 +2,8 @@ module ShitpostBot
   module ChannelConfig
     extend StoreData
 
-    @default_settings = load_file('data/default_settings.yml')
-    @channels = load_file('data/channel_config.yml')
+    @default_settings = load_file("#{Dir.pwd}/data/default_settings.yml")
+    @channels = load_file("#{Dir.pwd}/data/channel_config.yml")
 
     def self.load_config(id)
       return @channels[id] if @channels.key?(id)
@@ -19,7 +19,7 @@ module ShitpostBot
 
     def self.save
       LOGGER.debug 'Saving channel config'
-      save_to_file('data/channel_config.yml', @channels) unless @channels.empty?
+      save_to_file("#{Dir.pwd}/data/channel_config.yml", @channels) unless @channels.empty?
     end
     
     def self.default_settings

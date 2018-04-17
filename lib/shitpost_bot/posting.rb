@@ -3,25 +3,23 @@ module ShitpostBot
     def self.get_reply(text, channel)
       if channel.torch_checkpoint?
         text = Processing.strip_missing_characters(text, channel.valid_characters)
-        response = TorchRnn.sample(checkpoint: "data/checkpoints/#{channel.checkpoint}/#{channel.checkpoint}.t7",
+        response = TorchRnn.sample(checkpoint: "#{Dir.pwd}/data/checkpoints/#{channel.checkpoint}/#{channel.checkpoint}.t7",
                                  start_text: text,
                                  temperature: channel.temperature,
                                  gpu: CONFIG.gpu,
                                  gpu_backend: CONFIG.gpu_backend)
       elsif channel.word_checkpoint?
-        response = WordRnnTensorflow.sample(save_dir:"data/checkpoints/#{channel.checkpoint}/",
+        response = WordRnnTensorflow.sample(save_dir:"#{Dir.pwd}/data/checkpoints/#{channel.checkpoint}/",
                                   n: 1000,
                                   prime: text)
       end
-      puts "TEXT: #{text}"
-      puts "RESP1: #{response}"
+      puts "Input: #{text}"
       response = response.partition(text)[2]
       response = response.partition(text)[2] if channel.word_checkpoint?
-      puts "RESP2: #{response}"
       if response.include? '¥'
         response = response.partition('¥')[0]
       end
-      puts "RESP3: #{response}"
+      puts "Response: #{response}"
       if response.include? '§'
         output = []
         until response.chomp.empty?
@@ -32,6 +30,7 @@ module ShitpostBot
       else
         output = [response]
       end
+      STATS.posts_made += 1
       output
     end
   end
