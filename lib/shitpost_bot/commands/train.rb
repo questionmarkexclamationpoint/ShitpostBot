@@ -19,7 +19,7 @@ module ShitpostBot
         epochs ||= 50
         epochs = epochs.to_i.clamp(1, 500)
         name ||= event.channel.name
-        name.tr!('^A-Za-z0-9_-', '')
+        name.gsub!(/[^0-9A-Za-z.\-_]/, '')
         event.channel.start_typing
         if File.exists?("#{Dir.pwd}/data/checkpoints/#{name}")
           event << 'There is already a checkpoint with this name!'
