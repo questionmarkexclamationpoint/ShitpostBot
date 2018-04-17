@@ -13,7 +13,7 @@ module ShitpostBot
         entries -= ['.', '..']
         entries.select! do |entry| 
           path = "#{Dir.pwd}/data/checkpoints/#{entry}"
-          File.directory?(path) && entry.include?(term) && Dir.entries(path).include?("#{entry}.t7" && Dir.entries(path).include?("#{entry}_processed.json")
+          File.directory?(path) && entry.include?(term) && Dir.entries(path).include?("#{entry}.t7") && Dir.entries(path).include?("#{entry}_processed.json")
         end
         entries.reject!{|entry| Dir.entries("#{Dir.pwd}/data/checkpoints/#{entry}").any?{|f| f == 'config.pkl'}} # hiding word based checkpoints for now
         event << "Available checkpoints#{term.empty? ?  '' : ' containing the given term'}: #{entries.sort.join(', ')}"
