@@ -62,11 +62,13 @@ module Discordrb
       h = history(100)
       result = []
       i = h.length
+      notify_amount = 100
       while h.length > 0
         result += h
         h = history(100, result.last.id)
         i += h.length
-        postback_channel.send_message("Processed #{i} messages on #{server.name}::#{name}...") if i % 1000 == 0 && !postback_channel.nil?
+        postback_channel.send_message("Processed #{i} messages on #{server.name}::#{name}...") if i % notify_amount == 0 && !postback_channel.nil?
+        notify_amount *= 10 if i >= notify_amount * 10
       end
       postback_channel.send_message("Done processing. Processed #{i} messages on #{server.name}::#{name} in total.") unless postback_channel.nil?
       result.reverse
