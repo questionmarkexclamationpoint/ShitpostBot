@@ -18,10 +18,12 @@ module ShitpostBot
           return
         end
         channels.each do |channel|
-          STATS.checkpoint_popularity[channel.checkpoint] ||= 1
-          STATS.checkpoint_popularity[checkpoint] ||= 0
-          STATS.checkpoint_popularity[channel.checkpoint]
-          STATS.checkpoint_popularity[checkpoint] += 1
+          if channel.active
+            STATS.checkpoint_popularity[channel.checkpoint] ||= 1
+            STATS.checkpoint_popularity[checkpoint] ||= 0
+            STATS.checkpoint_popularity[channel.checkpoint]
+            STATS.checkpoint_popularity[checkpoint] += 1
+          end
           channel.checkpoint = checkpoint
         end
         event "Now using the #{checkpoint} checkpoint!"
