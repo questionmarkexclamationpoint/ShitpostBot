@@ -18,7 +18,7 @@ module ShitpostBot
       if response.include? '¥'
         response = response.partition('¥')[0]
       end
-      Logger.info("Posting in #{channel.server.name}::#{channel.name}:\n" +
+      LOGGER.info("Posting in #{channel.server.name}::#{channel.name}:\n" +
                   "  Input: #{text}\n" +
                   "  Output: #{response}\n")
       if response.include? '§'
