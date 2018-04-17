@@ -4,7 +4,7 @@ module ShitpostBot
       extend Discordrb::Commands::CommandContainer
       command([:finish, :f],
               description: 'Finishes the thought started in the given text.',
-              usage: "#{BOT.prefix}finish text",
+              usage: "#{BOT.prefix}(finish|f) <text>",
               min_args: 1
               ) do |event|
         event.channel.start_typing

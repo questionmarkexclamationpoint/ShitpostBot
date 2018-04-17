@@ -4,7 +4,7 @@ module ShitpostBot
       extend Discordrb::Commands::CommandContainer
       command([:fullread, :fr],
               description: 'Downloads the given channels\' chat logs *and all available metadata*, then saves them. If no channels are provided, the channel this command was issued in is used instead.',
-              usage: "#{ShitpostBot::BOT.prefix}read [\#channel1 [\#channel2 [...]]]]",
+              usage: "#{ShitpostBot::BOT.prefix}(fullread|fr) [\#channel1 [\#channel2 [...]]]]",
               help_available: true) do |event, *channels|
         event.channel.start_typing
         channels = Processing.process_channel_parameters(channels, event.channel)

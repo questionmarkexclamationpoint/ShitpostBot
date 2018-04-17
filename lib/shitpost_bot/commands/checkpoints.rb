@@ -4,7 +4,7 @@ module ShitpostBot
       extend Discordrb::Commands::CommandContainer
       command([:checkpoints, :cs], 
               description: 'Displays all checkpoints whose names contain the given term. If none is provided, displays all checkpoints.',
-              usage: "#{BOT.prefix}[checkpoints|cs] [term]",
+              usage: "#{BOT.prefix}(checkpoints|cs) [term]",
               max_args: 1
               ) do |event, term|
         term ||= ''

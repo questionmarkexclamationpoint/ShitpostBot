@@ -4,7 +4,7 @@ module ShitpostBot
       extend Discordrb::Commands::CommandContainer
       command([:think], 
               description: 'Enables original thoughts on the channel with a given frequency between 0.0 (I won\'t post any original thoughts) and 1.0 (I\'ll post original thoughts constantly). If no frequency is provided, the thought frequency is instead switched between 0.0 and 0.01.',
-              usage: "#{BOT.prefix}think [0.0 - 1.0]",
+              usage: "#{BOT.prefix}think (0.0 - 1.0)",
               arg_types: [Float],
               required_permissions: [:manage_server]
               ) do |event, frequency, *channels|
@@ -22,7 +22,7 @@ module ShitpostBot
           end
           channel.think = frequency
         end
-        event << 'Settings updated!'
+        event << "I will now post about #{frequency * 1.5} times per minute in #{channels.length > 1 ? 'this channel' : 'these channels'}!"
       end
     end
   end

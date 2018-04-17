@@ -3,8 +3,8 @@ module ShitpostBot
     module Settings
       extend Discordrb::Commands::CommandContainer
       command([:settings, :s], 
-              description: '',
-              usage: "#{BOT.prefix}settings",
+              description: 'Gives the current settings for this/these channel(s).',
+              usage: "#{BOT.prefix}(settings|s) [\#channel1 [\#channel2 [...]]]",
               help_available: true
               ) do |event, *channels|
         event.channel.start_typing

@@ -4,7 +4,7 @@ module ShitpostBot
       extend Discordrb::Commands::CommandContainer
       command([:about, :a],
               description: 'Shows some information about me.',
-              usage: "#{BOT.prefix}about",
+              usage: "#{BOT.prefix}(about|a)",
               max_args: 0,
               help_available: true
               ) do |event|

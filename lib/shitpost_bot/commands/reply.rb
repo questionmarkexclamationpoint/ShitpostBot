@@ -3,8 +3,8 @@ module ShitpostBot
     module Reply
       extend Discordrb::Commands::CommandContainer
       command([:reply, :r], 
-              description: 'Enables replies on the channel with a given frequency between 0.0 (I won\'t reply to any posts) and 1.0 (I\'ll respond to every post). If no frequency is provided, the reply frequency is instead switched between 0.0 and 1.0.',
-              usage: "#{BOT.prefix}reply [0.0 - 1.0]",
+              description: 'Enables replies on the channel with a given frequency between 0.0 (I won\'t reply to any posts) and 1.0 (I\'ll respond to 100% of posts). If no frequency is provided, the reply frequency is instead switched between 0.0 and 1.0.',
+              usage: "#{BOT.prefix}(reply|r) [0.0 - 1.0]",
               help_available: true,
               required_permissions: [:manage_server],
               arg_types: [Float],
@@ -23,7 +23,7 @@ module ShitpostBot
           end
           channel.reply = frequency
         end
-        event << 'Settings updated!'
+        event << "I'll now reply to #{frequency * 100}\% of posts in #{channels.length > 1 ? 'this channel' : 'these channels'}!"
       end
     end
   end

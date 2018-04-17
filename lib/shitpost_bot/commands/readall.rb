@@ -2,9 +2,9 @@ module ShitpostBot
   module Commands
     module Readall
       extend Discordrb::Commands::CommandContainer
-      command(:readall, 
+      command([:readall, :ra], 
               description: 'Downloads the server\'s chat logs, parses them to a format I understand, then saves them.',
-              usage: "#{BOT.prefix}readall",
+              usage: "#{BOT.prefix}(readall|ra)",
               help_available: true,
               max_args: 0
               ) do |event|

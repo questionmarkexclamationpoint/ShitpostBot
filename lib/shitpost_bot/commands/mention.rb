@@ -4,7 +4,7 @@ module ShitpostBot
       extend Discordrb::Commands::CommandContainer
       command([:mention, :m], 
               description: 'Enables/disables responses in the channel when the bot is mentioned. If mention is enabled on some/all of the channels given, all given channels will have mention disabled. If replies are also enabled, the bot will *not* double post.',
-              usage: "#{BOT.prefix}[mention|m] [\#channel1 [\#channel2 [...]]]",
+              usage: "#{BOT.prefix}(mention|m) [\#channel1 [\#channel2 [...]]]",
               required_permissions: [:manage_server],
               help_available: true
               ) do |event, *channels|
@@ -28,7 +28,7 @@ module ShitpostBot
           end
           channel.mention = turn_on
         end
-        event << 'Settings updated!'
+        event << "Mention has been #{turn_on ? 'enabled' : 'disabled'} for #{channels.length > 1 ? 'these channels' : 'this channel'}."
       end
     end
   end

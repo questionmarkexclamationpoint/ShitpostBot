@@ -3,8 +3,8 @@ module ShitpostBot
     module Checkpoint
       extend Discordrb::Commands::CommandContainer
       command([:checkpoint, :c],
-              description: 'Changes the checkpoint for this channel to a given checkpoint.',
-              usage: "#{ShitpostBot::BOT.prefix}[checkpoint|c] name [\#channel1 [\#channel2 [...]]]",
+              description: 'Changes the checkpoint for this/these channel(s) to a given checkpoint.',
+              usage: "#{ShitpostBot::BOT.prefix}(checkpoint|c) name [\#channel1 [\#channel2 [...]]]",
               required_permissions: [:manage_server],
               min_args: 1,
               help_available: true
@@ -24,7 +24,7 @@ module ShitpostBot
           STATS.checkpoint_popularity[checkpoint] += 1
           channel.checkpoint = checkpoint
         end
-        event 'Settings updated!'
+        event "Now using the #{checkpoint} checkpoint!"
       end
     end
   end

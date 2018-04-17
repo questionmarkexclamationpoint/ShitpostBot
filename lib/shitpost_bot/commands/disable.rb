@@ -4,7 +4,7 @@ module ShitpostBot
       extend Discordrb::Commands::CommandContainer
       command([:disable, :off],
               description: 'Disables all posting for this/these channel(s).',
-              usage: "#{ShitpostBot::BOT.prefix}disable  [\#channel1 [\#channel2 [...]]]",
+              usage: "#{ShitpostBot::BOT.prefix}(disable|off)  [\#channel1 [\#channel2 [...]]]",
               required_permissions: [:manage_server],
               help_available: true
               ) do |event, *channels|
@@ -16,7 +16,7 @@ module ShitpostBot
           channel.config = ShitpostBot::ChannelConfig.default_settings[:off]
           channel.checkpoint = checkpoint
         end
-        event << "All settings have been #{off ? 'turned on to their defaults' : 'disabled'} for #{channels.length > 1 ? these : this} channel."
+        event << "All settings have been disabled for #{channels.length > 1 ? 'these channels' : 'this channel'}."
       end
     end
   end
