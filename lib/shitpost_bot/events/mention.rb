@@ -3,7 +3,7 @@ module ShitpostBot
     module Mention
       extend Discordrb::EventContainer
       mention do |event|
-        STATS.mention += 1
+        STATS.mentions += 1
         if event.channel.mention && event.content[0] != BOT.prefix
           event.channel.start_typing
           start_text = Processing.format_messages(event.channel.recent_history, true)
