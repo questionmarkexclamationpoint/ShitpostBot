@@ -57,6 +57,8 @@ module ShitpostBot
   Commands.include!
   Events.include!
   
+  TRAINING_LOCK = Mutex.new
+  
   at_exit do
     LOGGER.info 'Saving files before exiting...'
     STATS.save
