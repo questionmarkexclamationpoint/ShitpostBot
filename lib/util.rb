@@ -12,7 +12,7 @@ module Util
     days = (time / 86_400).to_i
     time -= days * 86_400
     hours = (time / 3_600).to_i
-    time -= hours
+    time -= hours * 3_600
     minutes = (time / 60).to_i
     string = "#{days} day#{'s' unless days == 1},"
     string << " #{hours} hour#{'s' unless hours == 1},"

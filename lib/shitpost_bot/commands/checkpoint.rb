@@ -26,7 +26,7 @@ module ShitpostBot
           end
           channel.checkpoint = checkpoint
         end
-        event "Now using the #{checkpoint} checkpoint in #{channels.length == 1 ? 'this channel' : 'these channels'}!"
+        event << "Now using the #{checkpoint} checkpoint in #{channels.length == 1 ? 'this channel' : 'these channels'}!"
       end
     end
   end

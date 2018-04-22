@@ -24,10 +24,11 @@ module ShitpostBot
         name ||= event.channel.name
         name.gsub!(/[^0-9A-Za-z.\-_]/, '')
         event.channel.start_typing
-        if File.exists?("#{Dir.pwd}/data/checkpoints/#{name}")
+        if File.exists?("#{Dir.pwd}/data/checkpoints/#{name}/#{name}.t7") #currently only handling torch-rnn checkpoints
           event << 'There is already a checkpoint with this name!'
           return
         end
+        FileUtils.mkdir_p("#{Dir.pwd}/data/checkpoints/#{name}")
         channels = Processing.process_channel_parameters(channels, event.channel)
         return if channels.empty?
         Processing.write_channels_to_file(channels, "#{Dir.pwd}/data/checkpoints/#{name}/#{name}.txt")
@@ -45,7 +46,7 @@ module ShitpostBot
                            num_layers: layers,
                            dropout: dropout,
                            max_epochs: epochs,
-                           print_every: 1,
+                           print_every: 200,
                            checkpoint_every: 0,
                            checkpoint_name: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}",
                            gpu: CONFIG.gpu,

@@ -1,7 +1,7 @@
 require 'yaml'
 require 'open3'
 require 'json'
-
+require 'fileutils'
 require 'discordrb'
 
 module Kernel

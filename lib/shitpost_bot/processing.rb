@@ -16,7 +16,7 @@ module ShitpostBot
       end
       #outputing straight to the file, rather than processing the string and then outputing.
       #this is because appending to the file is *much* faster than appending to a string for very long strings.
-      open(filename, 'w') do |file|
+      File.open(filename, 'w') do |file|
         last_message = history.first
       #np = message.channel.symbols[:new_post]
       #nu = message.channel.symbols[:new_user]
@@ -68,7 +68,7 @@ module ShitpostBot
         text.gsub!(Regexp.new(' ' + pattern), '')
         text.gsub!(Regexp.new(pattern), '')
       end
-      text
+      text.chomp
     end
     def self.format_messages(messages, is_response = false)
       text = ''
@@ -86,7 +86,7 @@ module ShitpostBot
             last_message = message
           end
       end
-      text += ' § ¥'
+      text += ' § ¥ '
       text
     end
   end
