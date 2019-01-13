@@ -3,43 +3,81 @@ module ShitpostBot
     module Scrape
       extend Discordrb::Commands::CommandContainer
       command(:scrape,
-              help_available: false,
-              max_args: 1) do |event, verbose|
-        BOT.servers.each do |id, server|
-          verbose = (verbose.is_a?(String) && (verbose == 'true' || verbose.to_i == 1)) ? true : false
-          server.channels.each do |channel|
+              help_available: false) do |event|
+        unless event.author.id == CONFIG.owner_id
+          event.channel('Only the owner of the bot can use this command.')
+          return
+        end
+        BOT.servers.sort_by(&:first).map(&:last).reverse.each do |server|
+          server.text_channels.each do |channel|
             begin
-              log = channel.full_history(event.channel)
-              last_message = messages.first
-              conversationalized_log = []
-              multi_post = last_message.content.empty? ? [] : [last_message.content]
-              messages.each do |message|
+              channel.history(1)
+            rescue Discordrb::Errors::NoPermission
+              event.channel.send_message("No permission on #{channel.full_name}, skipping.")
+              next
+            end
+            event.channel.send_message("Processing #{channel.full_name}...")
+            dir = "#{Dir.pwd}/data/text/"
+            json = "#{dir}/#{channel.id}.json"
+            yaml = "#{dir}/#{channel.id}_conversation.yml"
+            txt = "#{dir}/#{channel.id}_conversation.txt"
+            [json, yaml, txt].each do |filename|
+              File.rename(filename, filename + '.bak') if File.exist?(filename)
+            end
+            begin
+              last_message = nil
+              json_file = File.open(json, 'w')
+              yaml_file = File.open(yaml, 'w')
+              txt_file = File.open(txt, 'w')
+              json_file << '['
+              yaml_file << '---'
+              txt_file << Constants::MESSAGE_SEPARATOR
+              i = 0
+              channel.each_message(event.channel) do |message|
+                i += 1
+                puts i
                 next if message.content.empty?
-                if last_message.author == message.author
-                  multi_post << message.content
-                else
-                  conversationalized_log << multi_post unless multi_post.empty?
-                  multi_post = [message.content]
+                is_new_user = last_message.nil? || last_message.user.id != message.user.id
+                #json
+                json_file << message.to_json + ','
+                #yml -- manually formatting here
+                pre = is_new_user ? '- ' : '  '
+                pre += message.content.include?("\n") ? "- |-\n  " : '- '
+                yaml_file << "\n" + pre + message.content.lines.map{ |l| '    ' + l }.join
+                #txt
+                proc = Processing.format_message(message)
+                unless proc.empty?
+                  txt_file << Constants::USER_SEPARATOR if is_new_user
+                  txt_file << proc + Constants::MESSAGE_SEPARATOR
                 end
                 last_message = message
               end
-              File.open("#{Dir.pwd}/data/text/#{channel.id}_conversation.yml", 'w') do |f|
-                f << YAML.dump(JSON.parse(JSON.dump(conversationalized_log)))
+              json_file.pos -= 1
+              json_file << ']'
+              yaml_file << '[]' if last_message.nil?
+              yaml_file << "\n"
+              txt_file << Constants::USER_SEPARATOR
+              json_file.close
+              yaml_file.close
+              txt_file.close
+            rescue Exception => e
+              event.channel.send_message("Exception encountered on #{channel.full_name}, skipping.\n"\
+                  + "Exception was:\n"\
+                  + "```\n"\
+                  + "#{e.full_message(highlight: false)}\n"\
+                  + "```")
+              [json, yaml, txt].each do |filename|
+                File.delete(filename) if File.exist?(filename)
+                File.rename(filename + '.bak', filename) if File.exist?(filename + '.bak')
               end
-              if verbose
-                File.open("#{Dir.pwd}/data/text/#{channel.id}.json", 'w') do |f|
-                  f << JSON.dump(log)
-                end
+            else
+              [json, yaml, txt].each do |filename|
+                File.delete(filename + '.bak') if File.exist?(filename + '.bak')
               end
-            rescue Discordrb::Errors::NoPermission
-              event << "No permission on #{server.name}::#{channel.name}, skipping"
-            rescue => e
-              event << "Encountered exception on #{server.name}::#{channel.name}, skipping"
-              event << "Exception was: #{e}"
             end
-            event << 'Done scraping!'
           end
         end
+        'Done scraping!'
       end
     end
   end

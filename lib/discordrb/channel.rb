@@ -24,8 +24,8 @@ module Discordrb
           unless content.empty?
             #file << np
             #file << nu unless last_message.user == message.user
-            file << '§'
-            file << '¥' unless last_message.user == message.user
+            file << Constants::MESSAGE_SEPARATOR
+            file << Constants::USER_SEPARATOR unless last_message.user == message.user
             file << content
             last_message = message
           end
@@ -33,11 +33,34 @@ module Discordrb
       end
     end
     
-    def full_write_to_file(filename)
+    def write_json_to_file(filename)
       history = full_history
       File.open(filename, 'w') do |file|
         f << JSON.dump(history)
       end
+    end
+    
+    def each_message(postback_channel = nil)
+      return enum_for(:each_message, postback_channel) unless block_given?
+      curr = history(1, nil, 0)
+      return if curr.empty?
+      curr = curr[0]
+      yield curr
+      i = 1
+      notify_amount = 100
+      old_pow = notify_amount
+      until (h = history(100, nil, curr.id).reverse).empty?
+        h.each{ |message| yield message }
+        i += h.size
+        if i >= notify_amount && !postback_channel.nil?      
+          postback_channel.send_message("Processed #{i} messages on #{full_name}...")
+          old_pow *= 10 if notify_amount == old_pow * 10
+          notify_amount += old_pow
+        end
+        curr = h.last
+      end
+      postback_channel.send_message("Done processing #{full_name}.") \
+          unless postback_channel.nil?
     end
     
     def recent_history(amount = 10)
@@ -64,13 +87,13 @@ module Discordrb
       i = h.length
       notify_amount = 100
       while h.length > 0
-        postback_channel.send_message("Processed #{i} messages on #{server.name}::#{name}...") if i % notify_amount == 0 && !postback_channel.nil?
+        postback_channel.send_message("Processed #{i} messages on #{full_name}...") if i % notify_amount == 0 && !postback_channel.nil?
         result += h
         h = history(100, result.last.id)
         i += h.length
         notify_amount *= 10 if i >= notify_amount * 10
       end
-      postback_channel.send_message("Done processing. Processed #{i} messages on #{server.name}::#{name} in total.") unless postback_channel.nil?
+      postback_channel.send_message("Done processing. Processed #{i} messages on #{full_name} in total.") unless postback_channel.nil?
       result.reverse
     end
     
@@ -96,6 +119,10 @@ module Discordrb
     
     def active
       mention || reply > 0 || think > 0
+    end
+    
+    def full_name
+      "#{server.name}::#{name}"
     end
         
     private

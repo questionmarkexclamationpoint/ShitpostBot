@@ -4,7 +4,7 @@ module Discordrb
       {
         'icon_url' => @icon_url,
         'proxy_icon_url' => @proxy_icon_url,
-        'value' => value
+        'text' => text
       }.to_json
     end
   end
