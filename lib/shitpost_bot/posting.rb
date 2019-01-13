@@ -18,7 +18,7 @@ module ShitpostBot
       if response.include? Constants::USER_SEPARATOR
         response = response.partition(Constants::USER_SEPARATOR)[0]
       end
-      LOGGER.info("Posting in #{channel.server.name}::#{channel.name}:\n" +
+      LOGGER.info("Posting in #{channel.full_name}:\n" +
                   "  Input: #{text}\n" +
                   "  Output: #{response}\n")
       if response.include? Constants::MESSAGE_SEPARATOR
