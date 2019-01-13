@@ -9,7 +9,7 @@ module ShitpostBot
               ) do |event|
         event.channel.start_typing
         start_text = event.message.content.partition(' ')[2]
-        text = '§ ¥ ' + start_text
+        text = "#{Constants::MESSAGE_SEPARATOR}#{Constants::USER_SEPARATOR}#{start_text}"
         output = Posting.get_reply(text, event.channel)
         output[0] = start_text + output[0].to_s
         output.each do |o|

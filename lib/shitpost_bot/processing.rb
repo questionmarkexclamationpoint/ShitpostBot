@@ -25,13 +25,13 @@ module ShitpostBot
           unless content.empty?
             #file << np
             #file << nu unless last_message.user == message.user
-            file << ' § '
-            file << '¥ ' unless last_message.user == message.user
+            file << Constants::MESSAGE_SEPARATOR
+            file << Constants::USER_SEPARATOR unless last_message.user == message.user
             file << content
             last_message = message
           end
         end
-        file << ' § ¥ '
+        file << Constants::MESSAGE_SEPARATOR + Constants::USER_SEPARATOR
       end
     end
     def self.full_write_channels_to_file(channels, filename)
@@ -80,13 +80,13 @@ module ShitpostBot
           unless content.empty?
             #text += np
             #text += nu unless last_message.user == message.user
-            text += ' § '
-            text += '¥ ' unless last_message.user == message.user
+            text += Constants::MESSAGE_SEPARATOR
+            text += Constants::USER_SEPARATOR unless last_message.user == message.user
             text += content
             last_message = message
           end
       end
-      text += ' § ¥ '
+      text += Constants::MESSAGE_SEPARATOR + Constants::USER_SEPARATOR
       text
     end
   end

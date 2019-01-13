@@ -15,16 +15,16 @@ module ShitpostBot
       end
       response = response.partition(text)[2]
       response = response.partition(text)[2] if channel.word_checkpoint?
-      if response.include? '¥'
-        response = response.partition('¥')[0]
+      if response.include? Constants::USER_SEPARATOR
+        response = response.partition(Constants::USER_SEPARATOR)[0]
       end
       LOGGER.info("Posting in #{channel.server.name}::#{channel.name}:\n" +
                   "  Input: #{text}\n" +
                   "  Output: #{response}\n")
-      if response.include? '§'
+      if response.include? Constants::MESSAGE_SEPARATOR
         output = []
         until response.chomp.empty?
-          response = response.partition('§')
+          response = response.partition(Constants::MESSAGE_SEPARATOR)
           output << response[0] unless response[0].empty?
           response = response[2]
         end
