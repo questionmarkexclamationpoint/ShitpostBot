@@ -8,7 +8,7 @@ module ShitpostBot
           event.channel('Only the owner of the bot can use this command.')
           return
         end
-        BOT.servers.sort_by(&:first).map(&:last).reverse.each do |server|
+        BOT.servers.values.each do |server|
           server.text_channels.each do |channel|
             begin
               channel.history(1)
