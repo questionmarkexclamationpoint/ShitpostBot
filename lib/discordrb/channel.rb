@@ -1,6 +1,8 @@
 module Discordrb
   class Channel
     attr_reader :config
+    alias :old_history :history
+    remove_method :history
     
     old_initialize = instance_method(:initialize)
     define_method(:initialize) do |data, bot, exists = true|
@@ -63,7 +65,7 @@ module Discordrb
           unless postback_channel.nil?
     end
     
-    def recent_history(amount = 10)
+    def history(amount = 10)
       if amount > 100
         h = history(100)
         amount -= 100
@@ -78,10 +80,10 @@ module Discordrb
         h = history(a, result.last.id)
         result += h
       end
-      result.reverse
+      result
     end
     
-    def full_history(postback_channel = nil)
+    def history(postback_channel = nil)
       h = history(100)
       result = []
       i = h.length
