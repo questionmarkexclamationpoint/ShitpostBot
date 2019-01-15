@@ -44,59 +44,97 @@ module Discordrb
     
     def each_message(postback_channel = nil)
       return enum_for(:each_message, postback_channel) unless block_given?
-      curr = history(1, nil, 0)
-      return if curr.empty?
-      curr = curr[0]
-      yield curr
-      i = 1
-      notify_amount = 100
-      old_pow = notify_amount
-      until (h = history(100, nil, curr.id).reverse).empty?
-        h.each{ |message| yield message }
-        i += h.size
-        if i >= notify_amount && !postback_channel.nil?      
-          postback_channel.send_message("Processed #{i} messages on #{full_name}...")
-          old_pow *= 10 if notify_amount == old_pow * 10
-          notify_amount += old_pow
+      done = false
+      queue = Queue.new
+      consumer = Thread.new do
+        until done do
+          yield queue.pop
         end
-        curr = h.last
       end
-      postback_channel.send_message("Done processing #{full_name}.") \
-          unless postback_channel.nil?
+      producer = Thread.new do
+        curr = history(1, nil, 0)
+        if curr.empty?
+          done = true
+          Thread.exit
+        end
+        curr = curr[0]
+        queue << curr
+        i = 1
+        notify_amount = 100
+        old_pow = notify_amount
+        until (h = history(100, nil, curr.id).reverse).empty?
+          h.each{ |message| queue << message }
+          i += h.size
+          if i >= notify_amount && !postback_channel.nil?
+            postback_channel.send_message("Found #{i} messages on #{full_name}...")
+            old_pow *= 10 if notify_amount == old_pow * 10
+            notify_amount += old_pow
+          end
+          curr = h.last
+        end
+        postback_channel.send_message("Returned #{i} messages from #{full_name}.") \
+            unless postback_channel.nil?
+      end
+      [consumer, producer].each(&:join)
     end
     
-    def history(amount = 10)
-      if amount > 100
-        h = history(100)
-        amount -= 100
+    
+    def history(amount = 10, before_id = nil, after_id = nil, around_id = nil, postback = nil)
+      around = before_id.nil? && after_id.nil? && !around_id.nil?
+      result = []
+      notify_amount = 100
+      if around
+        amount -= 1 if amount.odd?
+        h = amount <= 0 ? [] : old_history(1, nil, nil, around_id)
+        result = h
+        i = h.length
+        before_done = false
+        after_done = false
+        while before.length > 0 && after.length && h.length > 0
+          postback.send_message("Found #{result.length} messages on #{full_name}...") \
+              if (i - 1) % notify_amount == 0 && !postback.nil?
+          notify_amount *= 10 if i >= notify_amount * 10
+          a = (amount > 100 ? 100 : amount)
+
+          before_amount = after_done ? a : a / 2
+          before = old_history(before_amount, result.last.id)
+          before_done = before.empty?
+
+          after_amount = before_done ? a : a / 2
+          after = old_history(after_amount, result.first.id)
+          after_done = after.empty?
+
+          amount -= before.length + after.length
+          result = [before, result, after].flatten
+        end
       else
-        h = history(amount)
-        amount = 0
+        if amount > 100
+          h = old_history(100, before_id, after_id)
+          amount -= 100
+        else
+          h = old_history(amount, before_id, after_id)
+          amount = 0
+        end
+        i = h.length
+        result = h
+        while h.length > 0 && amount > 0
+          postback.send_message("Found #{result.length} messages on #{full_name}...") \
+              if i % notify_amount == 0 && !postback.nil?
+          a = (amount > 100 ? 100 : amount)
+          amount -= a
+          h = old_history(a, result.last.id)
+          i += h.length
+          notify_amount *= 10 if i >= notify_amount * 10
+          result += h
+        end
       end
-      result = h
-      while h.length > 0 && amount > 0
-        a = (amount > 100 ? 100 : amount)
-        amount -= a
-        h = history(a, result.last.id)
-        result += h
-      end
+      postback.send_message("Returning #{result.length} messages from #{full_name}.") \
+          unless postback.nil? 
       result
     end
     
-    def history(postback_channel = nil)
-      h = history(100)
-      result = []
-      i = h.length
-      notify_amount = 100
-      while h.length > 0
-        postback_channel.send_message("Processed #{i} messages on #{full_name}...") if i % notify_amount == 0 && !postback_channel.nil?
-        result += h
-        h = history(100, result.last.id)
-        i += h.length
-        notify_amount *= 10 if i >= notify_amount * 10
-      end
-      postback_channel.send_message("Done processing. Processed #{i} messages on #{full_name} in total.") unless postback_channel.nil?
-      result.reverse
+    def full_history(postback_channel = nil)
+      return history(Float::INFINITY, nil, nil, nil, postback_channel).reverse
     end
     
     def update_config(attributes = {})
