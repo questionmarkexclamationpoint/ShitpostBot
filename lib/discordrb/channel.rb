@@ -44,17 +44,16 @@ module Discordrb
     
     def each_message(postback_channel = nil)
       return enum_for(:each_message, postback_channel) unless block_given?
-      done = false
       queue = Queue.new
       consumer = Thread.new do
-        until done do
+        while true do
           yield queue.pop
         end
       end
       producer = Thread.new do
         curr = history(1, nil, 0)
         if curr.empty?
-          done = true
+          consumer.kill
           Thread.exit
         end
         curr = curr[0]
@@ -72,10 +71,12 @@ module Discordrb
           end
           curr = h.last
         end
+        consumer.kill
         postback_channel.send_message("Returned #{i} messages from #{full_name}.") \
             unless postback_channel.nil?
       end
-      [consumer, producer].each(&:join)
+      producer.join
+      nil
     end
     
     
