@@ -42,8 +42,8 @@ module Discordrb
       end
     end
     
-    def each_message(postback_channel = nil)
-      return enum_for(:each_message, postback_channel) unless block_given?
+    def each_message(log = false)
+      return enum_for(:each_message, log) unless block_given?
       queue = Queue.new
       consumer = Thread.new do
         while true do
@@ -64,23 +64,23 @@ module Discordrb
         until (h = history(100, nil, curr.id).reverse).empty?
           h.each{ |message| queue << message }
           i += h.size
-          if i >= notify_amount && !postback_channel.nil?
-            postback_channel.send_message("Found #{i} messages on #{full_name}...")
+          if i >= notify_amount && log
+            puts "Found #{i} messages on #{full_name}..." if log
             old_pow *= 10 if notify_amount == old_pow * 10
             notify_amount += old_pow
           end
           curr = h.last
         end
+        until queue.empty? {nil}
         consumer.kill
-        postback_channel.send_message("Returned #{i} messages from #{full_name}.") \
-            unless postback_channel.nil?
+        puts "Returned #{i} messages from #{full_name}." if log
       end
       producer.join
       nil
     end
     
     
-    def history(amount = 10, before_id = nil, after_id = nil, around_id = nil, postback = nil)
+    def history(amount = 10, before_id = nil, after_id = nil, around_id = nil, log = false)
       around = before_id.nil? && after_id.nil? && !around_id.nil?
       result = []
       notify_amount = 100
@@ -92,8 +92,9 @@ module Discordrb
         before_done = false
         after_done = false
         while before.length > 0 && after.length && h.length > 0
-          postback.send_message("Found #{result.length} messages on #{full_name}...") \
-              if (i - 1) % notify_amount == 0 && !postback.nil?
+          
+          puts "Found #{result.length} messages on #{full_name}..." \
+              if (i - 1) % notify_amount == 0 && log
           notify_amount *= 10 if i >= notify_amount * 10
           a = (amount > 100 ? 100 : amount)
 
@@ -119,8 +120,7 @@ module Discordrb
         i = h.length
         result = h
         while h.length > 0 && amount > 0
-          postback.send_message("Found #{result.length} messages on #{full_name}...") \
-              if i % notify_amount == 0 && !postback.nil?
+          puts "Found #{result.length} messages on #{full_name}..." if i % notify_amount == 0 && log
           a = (amount > 100 ? 100 : amount)
           amount -= a
           h = old_history(a, result.last.id)
@@ -129,13 +129,12 @@ module Discordrb
           result += h
         end
       end
-      postback.send_message("Returning #{result.length} messages from #{full_name}.") \
-          unless postback.nil? 
+      puts "Returning #{result.length} messages from #{full_name}." if log
       result
     end
     
-    def full_history(postback_channel = nil)
-      return history(Float::INFINITY, nil, nil, nil, postback_channel).reverse
+    def full_history(log = false)
+      return history(Float::INFINITY, nil, nil, nil, log).reverse
     end
     
     def update_config(attributes = {})
@@ -143,7 +142,10 @@ module Discordrb
     end
     
     def valid_characters
-      @valid_characters = ((checkpoint == @last_checkpoint) ? @valid_characters : JSON.parse(File.read("#{Dir.pwd}/data/checkpoints/#{checkpoint}/#{checkpoint}_processed.json"), )['token_to_idx'].keys)
+      @valid_characters = checkpoint == @last_checkpoint \
+        ? @valid_characters \
+        : JSON.parse(File.read("#{Dir.pwd}/data/checkpoints/#{checkpoint}/#{checkpoint}_processed.json"), )['token_to_idx'].keys
+      @valid_characters = @valid_characters.to_set
       @last_valid_checkpoint = checkpoint
       @valid_characters
     end

@@ -3,6 +3,7 @@ require 'open3'
 require 'json'
 require 'fileutils'
 require 'discordrb'
+require 'set'
 
 module Kernel
   def run_supressed(&block)

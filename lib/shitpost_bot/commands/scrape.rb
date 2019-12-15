@@ -32,7 +32,7 @@ module ShitpostBot
               json_file << '['
               yaml_file << '---'
               txt_file << Constants::MESSAGE_SEPARATOR
-              channel.each_message(event.channel) do |message|
+              channel.each_message(true) do |message|
                 next if message.content.empty?
                 is_new_user = last_message.nil? || last_message.user.id != message.user.id
                 #json
