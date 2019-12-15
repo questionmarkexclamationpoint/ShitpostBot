@@ -9,6 +9,7 @@ module ShitpostBot
       end
       result
     end
+
     def self.write_channels_to_file(channels, filename)
       history = []
       channels.each do |channel|
@@ -34,6 +35,7 @@ module ShitpostBot
         file << Constants::MESSAGE_SEPARATOR + Constants::USER_SEPARATOR
       end
     end
+
     def self.full_write_channels_to_file(channels, filename)
       history = []
       channels.each do |channel|
@@ -43,6 +45,7 @@ module ShitpostBot
         f << JSON.dump(history)
       end
     end
+
     def self.process_channel_parameters(channels, home_channel)
       return [home_channel] if channels.empty?
       channels.length.times do |i|
@@ -57,6 +60,7 @@ module ShitpostBot
       end
       channels
     end
+
     def self.format_message(message, is_response = false)
       return '' if (message.from_bot? && !is_response) ||
                    message.content[0] == ShitpostBot::BOT.prefix ||
@@ -70,6 +74,7 @@ module ShitpostBot
       end
       text.chomp
     end
+
     def self.format_messages(messages, is_response = false)
       text = ''
       last_message = messages.first

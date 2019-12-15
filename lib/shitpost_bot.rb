@@ -37,10 +37,7 @@ module ShitpostBot
   end
 
   CONFIG = Config.new
-  
-  
-  require_relative 'util'
-  require_relative 'constants'
+
   require_relative 'torch_rnn'
   require_relative 'word_rnn_tensorflow'
 

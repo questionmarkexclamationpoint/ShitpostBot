@@ -16,7 +16,7 @@ module ShitpostBot
           event << "  #{key}: #{value}"
         end
         event << "Times mentioned: #{STATS.mentions}"
-        event << "Uptime: #{Util.time_in_words(STATS.uptime)}"
+        event << "Uptime: #{ChronicDuration.output(STATS.uptime)}"
         event << "Ping: #{ping}ms"
       end
     end
