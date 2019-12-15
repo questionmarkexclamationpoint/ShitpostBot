@@ -65,15 +65,17 @@ module Discordrb
           h.each{ |message| queue << message }
           i += h.size
           if i >= notify_amount && log
-            puts "Found #{i} messages on #{full_name}..." if log
+            LOGGER.info("Found #{i} messages on #{full_name}...") if log
             old_pow *= 10 if notify_amount == old_pow * 10
             notify_amount += old_pow
           end
           curr = h.last
         end
-        until queue.empty? {nil}
+        until queue.empty? do
+          nil
+        end
         consumer.kill
-        puts "Returned #{i} messages from #{full_name}." if log
+        LOGGER.info("Returned #{i} messages from #{full_name}.") if log
       end
       producer.join
       nil
@@ -93,8 +95,7 @@ module Discordrb
         after_done = false
         while before.length > 0 && after.length && h.length > 0
           
-          puts "Found #{result.length} messages on #{full_name}..." \
-              if (i - 1) % notify_amount == 0 && log
+          LOGGER.info("Found #{result.length} messages on #{full_name}...") if (i - 1) % notify_amount == 0 && log
           notify_amount *= 10 if i >= notify_amount * 10
           a = (amount > 100 ? 100 : amount)
 
@@ -120,7 +121,7 @@ module Discordrb
         i = h.length
         result = h
         while h.length > 0 && amount > 0
-          puts "Found #{result.length} messages on #{full_name}..." if i % notify_amount == 0 && log
+          LOGGER.info("Found #{result.length} messages on #{full_name}...") if i % notify_amount == 0 && log
           a = (amount > 100 ? 100 : amount)
           amount -= a
           h = old_history(a, result.last.id)
@@ -129,7 +130,7 @@ module Discordrb
           result += h
         end
       end
-      puts "Returning #{result.length} messages from #{full_name}." if log
+      LOGGER.info("Returning #{result.length} messages from #{full_name}.") if log
       result
     end
     
