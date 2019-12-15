@@ -4,6 +4,7 @@ require 'json'
 require 'fileutils'
 require 'discordrb'
 require 'set'
+require 'chronic_duration'
 
 module Kernel
   def run_supressed(&block)
@@ -66,7 +67,7 @@ module ShitpostBot
     exit!
   end
   
-  LOGGER.info "Oauth url: #{BOT.invite_url}"
+  LOGGER.info "Oauth url: #{BOT.invite_url(permission_bits: 461824)}"
   LOGGER.info 'Use ctrl+c to safely stop the bot.'
   BOT.run(:async)
 

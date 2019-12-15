@@ -26,13 +26,13 @@ module ShitpostBot
           unless content.empty?
             #file << np
             #file << nu unless last_message.user == message.user
-            file << Constants::MESSAGE_SEPARATOR
-            file << Constants::USER_SEPARATOR unless last_message.user == message.user
+            file << CharacterMapping::MESSAGE_SEPARATOR
+            file << CharacterMapping::USER_SEPARATOR unless last_message.user == message.user
             file << content
             last_message = message
           end
         end
-        file << Constants::MESSAGE_SEPARATOR + Constants::USER_SEPARATOR
+        file << CharacterMapping::MESSAGE_SEPARATOR + CharacterMapping::USER_SEPARATOR
       end
     end
 
@@ -85,13 +85,13 @@ module ShitpostBot
           unless content.empty?
             #text += np
             #text += nu unless last_message.user == message.user
-            text += Constants::MESSAGE_SEPARATOR
-            text += Constants::USER_SEPARATOR unless last_message.user == message.user
+            text += CharacterMapping::MESSAGE_SEPARATOR
+            text += CharacterMapping::USER_SEPARATOR unless last_message.user == message.user
             text += content
             last_message = message
           end
       end
-      text += Constants::MESSAGE_SEPARATOR + Constants::USER_SEPARATOR
+      text += CharacterMapping::MESSAGE_SEPARATOR + CharacterMapping::USER_SEPARATOR
       text
     end
   end

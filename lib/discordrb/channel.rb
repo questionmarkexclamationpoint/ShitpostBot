@@ -26,8 +26,8 @@ module Discordrb
           unless content.empty?
             #file << np
             #file << nu unless last_message.user == message.user
-            file << Constants::MESSAGE_SEPARATOR
-            file << Constants::USER_SEPARATOR unless last_message.user == message.user
+            file << CharacterMapping::MESSAGE_SEPARATOR
+            file << CharacterMapping::USER_SEPARATOR unless last_message.user == message.user
             file << content
             last_message = message
           end

@@ -4,6 +4,7 @@ module ShitpostBot
       extend Discordrb::Commands::CommandContainer
       command(:scrape,
               help_available: false) do |event|
+        event.channel.start_typing
         unless event.author.id == CONFIG.owner_id
           event << 'Only the owner of the bot can use this command.'
           return
@@ -32,7 +33,7 @@ module ShitpostBot
               txt_file = File.open(txt, 'w')
               json_file << '['
               yaml_file << '---'
-              txt_file << Constants::MESSAGE_SEPARATOR
+              txt_file << CharacterMapping::MESSAGE_SEPARATOR
               channel.each_message(true) do |message|
                 next if message.content.empty?
                 is_new_user = last_message.nil? || last_message.user.id != message.user.id
@@ -45,8 +46,8 @@ module ShitpostBot
                 #txt
                 proc = Processing.format_message(message)
                 unless proc.empty?
-                  txt_file << Constants::USER_SEPARATOR if is_new_user
-                  txt_file << proc + Constants::MESSAGE_SEPARATOR
+                  txt_file << CharacterMapping::USER_SEPARATOR if is_new_user
+                  txt_file << proc + CharacterMapping::MESSAGE_SEPARATOR
                 end
                 last_message = message
               end
@@ -54,7 +55,7 @@ module ShitpostBot
               json_file << ']'
               yaml_file << '[]' if last_message.nil?
               yaml_file << "\n"
-              txt_file << Constants::USER_SEPARATOR
+              txt_file << CharacterMapping::USER_SEPARATOR
               json_file.close
               yaml_file.close
               txt_file.close
