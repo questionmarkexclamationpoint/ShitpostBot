@@ -151,16 +151,6 @@ module Discordrb
       @valid_characters
     end
     
-    def word_checkpoint?
-      files = Dir["#{Dir.pwd}/data/checkpoints/#{checkpoint}/*"]
-      files.include? "#{Dir.pwd}/data/checkpoints/#{checkpoint}/input.txt"
-    end
-    
-    def torch_checkpoint?
-      files = Dir["#{Dir.pwd}/data/checkpoints/#{checkpoint}/*"]
-      files.include? "#{Dir.pwd}/data/checkpoints/#{checkpoint}/#{checkpoint}.t7"
-    end
-    
     def active
       mention || reply > 0 || think > 0
     end

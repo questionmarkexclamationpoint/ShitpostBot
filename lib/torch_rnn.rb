@@ -85,7 +85,8 @@ module TorchRnn
                   temperature: 1,
                   gpu: 0,
                   gpu_backend: 'cuda',
-                  verbose: 0)
+                  verbose: 0,
+                  stop_token: '')
     checkpoint = File.expand_path(checkpoint)
     args = ['th', 'sample.lua',
                 '-checkpoint', "#{checkpoint}",
@@ -93,7 +94,8 @@ module TorchRnn
                 '-temperature', "#{temperature}",
                 '-gpu', "#{gpu}",
                 '-gpu_backend', "#{gpu_backend}",
-                '-verbose', "#{verbose}"]
+                '-verbose', "#{verbose}",
+                '-stop_token', "#{stop_token}"]
     args += ['-start_text', "#{start_text.chomp}"] unless start_text.nil? || start_text.chomp.empty?
     args << {:chdir => ShitpostBot::CONFIG.torch_rnn_location}
     Util.syscall(*args)

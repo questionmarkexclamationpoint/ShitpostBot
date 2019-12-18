@@ -14,7 +14,7 @@ module ShitpostBot
           end
         end
         start_text = event.message.content.partition(' ')[2]
-        text = "#{CharacterMapping::MESSAGE_SEPARATOR}#{Constants::USER_SEPARATOR}#{start_text}"
+        text = "#{CharacterMapping::MESSAGE_SEPARATOR}#{CharacterMapping::USER_SEPARATOR}#{start_text}"
         output = Posting.get_reply(text, event.channel)
         output[0] = start_text + output[0].to_s
         typer.kill

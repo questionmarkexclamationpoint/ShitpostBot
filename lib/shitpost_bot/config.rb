@@ -25,10 +25,6 @@ module ShitpostBot
       puts 'Enter your torch-rnn install location [~/torch-rnn]'
       @config[:torch_rnn_location] = File.expand_path(gets.chomp)
       @config[:torch_rnn_location] = File.expand_path('~/torch-rnn') if @config[:torch_rnn_location].empty?
-
-      puts 'Enter your word-rnn-tensorflow install location [~/word-rnn-tensorflow]'
-      @config[:word_rnn_tensorflow_location] = File.expand_path(gets.chomp)
-      @config[:word_rnn_tensorflow_location] = File.expand_path('~/word-rnn-tensorflow') if @config[:word_rnn_tensorflow_location].empty?
       
       while @config[:gpu].nil? || @config[:gpu] < -1
         puts 'Enter your gpu (typically 0 [primary gpu] or -1 [cpu]) [0]'
