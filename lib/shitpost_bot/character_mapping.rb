@@ -1,5 +1,5 @@
 module ShitpostBot
-  module SpecialCharacters
+  module CharacterMapping
     MESSAGE_SEPARATOR = [0xE000].pack("U*").freeze
     USER_SEPARATOR = [0xE001].pack("U*").freeze
     ENCODING_CHARACTERS = [

@@ -143,7 +143,7 @@ module Discordrb
     end
     
     def valid_characters
-      @valid_characters = checkpoint == @last_checkpoint \
+      @valid_characters = checkpoint == @last_valid_checkpoint \
         ? @valid_characters \
         : JSON.parse(File.read("#{Dir.pwd}/data/checkpoints/#{checkpoint}/#{checkpoint}_processed.json"), )['token_to_idx'].keys
       @valid_characters = @valid_characters.to_set
