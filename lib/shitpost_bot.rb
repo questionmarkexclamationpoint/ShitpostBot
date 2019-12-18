@@ -40,7 +40,6 @@ module ShitpostBot
   CONFIG = Config.new
 
   require_relative 'torch_rnn'
-  require_relative 'word_rnn_tensorflow'
 
   BOT = Discordrb::Commands::CommandBot.new(token: CONFIG.discord_token,
                                             client_id: CONFIG.discord_client_id,
