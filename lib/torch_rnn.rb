@@ -94,9 +94,9 @@ module TorchRnn
                 '-temperature', "#{temperature}",
                 '-gpu', "#{gpu}",
                 '-gpu_backend', "#{gpu_backend}",
-                '-verbose', "#{verbose}",
-                '-stop_token', "#{stop_token}"]
-    args += ['-start_text', "#{start_text.chomp}"] unless start_text.nil? || start_text.chomp.empty?
+                '-verbose', "#{verbose}"]
+    args += ['-start_text', start_text] unless start_text.nil? || start_text.empty?
+    args += ['-stop_token', stop_token] unless stop_token.nil? || stop_token.empty?
     args << {:chdir => ShitpostBot::CONFIG.torch_rnn_location}
     Util.syscall(*args)
   end

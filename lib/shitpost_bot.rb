@@ -39,6 +39,7 @@ module ShitpostBot
 
   CONFIG = Config.new
 
+  require_relative 'util'
   require_relative 'torch_rnn'
 
   BOT = Discordrb::Commands::CommandBot.new(token: CONFIG.discord_token,
