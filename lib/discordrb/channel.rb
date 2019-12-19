@@ -11,6 +11,7 @@ module Discordrb
         @config = ShitpostBot::ChannelConfig.load_config(@id)
         create_methods
       end
+      self
     end
     
     def write_to_file(filename)

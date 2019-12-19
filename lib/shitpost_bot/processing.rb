@@ -78,13 +78,9 @@ module ShitpostBot
     def self.format_messages(messages, is_response = false)
       text = ''
       last_message = messages.first
-      #np = message.channel.symbols[:new_post]
-      #nu = message.channel.symbols[:new_user]
       messages.each do |message|
           content = format_message(message, is_response)
           unless content.empty?
-            #text += np
-            #text += nu unless last_message.user == message.user
             text += CharacterMapping::MESSAGE_SEPARATOR
             text += CharacterMapping::USER_SEPARATOR unless last_message.user == message.user
             text += content

@@ -37,20 +37,20 @@ module ShitpostBot
           TRAINING_LOCK.synchronize do
             event << 'I\'m training now! I\'ll let you know when I\'m done.'
             TorchRnn.preprocess(input_txt: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}.txt", 
-                                output_h5: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}_processed.h5",
-                                output_json: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}_processed.json",
-                                quiet: true)
+                  output_h5: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}_processed.h5",
+                  output_json: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}_processed.json",
+                  quiet: true)
             a = TorchRnn.train(input_h5: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}_processed.h5",
-                           input_json: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}_processed.json",
-                           rnn_size: size,
-                           num_layers: layers,
-                           dropout: dropout,
-                           max_epochs: epochs,
-                           print_every: 200,
-                           checkpoint_every: 0,
-                           checkpoint_name: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}",
-                           gpu: CONFIG.gpu,
-                           gpu_backend: CONFIG.gpu_backend)
+                 input_json: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}_processed.json",
+                 rnn_size: size,
+                 num_layers: layers,
+                 dropout: dropout,
+                 max_epochs: epochs,
+                 print_every: 200,
+                 checkpoint_every: 0,
+                 checkpoint_name: "#{Dir.pwd}/data/checkpoints/#{name}/#{name}",
+                 gpu: CONFIG.gpu,
+                 gpu_backend: CONFIG.gpu_backend)
           end
           event.channel.start_typing
           files = Dir.entries("#{Dir.pwd}/data/checkpoints/#{name}/")
