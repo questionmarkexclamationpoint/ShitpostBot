@@ -66,10 +66,7 @@ module ShitpostBot
         text.gsub!(Regexp.new(' ' + pattern), '')
         text.gsub!(Regexp.new(pattern), '')
       end
-      CharacterMapping.each_regex do |regex|
-        text.gsub!(regex){|capture| message.channel.server.get_or_create_mapping(capture)}
-      end
-      text.strip
+      text.gsub!(CharacterMapping.ALL){|capture| message.channel.server.get_or_create_mapping(capture)}.strip
     end
 
     def self.map_special_characters(text, server)
