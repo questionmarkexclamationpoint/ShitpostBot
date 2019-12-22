@@ -2,7 +2,7 @@ module ShitpostBot
   module ServerConfig
     extend StoreData
 
-    @servers = load_file("#{Dir.pwd}/data/channel_config.yml")
+    @servers = load_file("#{Dir.pwd}/data/server_config.yml")
 
     def self.load_config(id)
       return @servers[id] if @servers.key?(id)

@@ -79,7 +79,7 @@ module ShitpostBot
       ret = nil
       server.lock.synchronize do
         ret = text
-        ret.gsub!(Regexp.new('[' + server.mapped_chars + ']')){|v| server.special_characters[v]} unless server.mapped_chars.empty?
+        ret.gsub!(Regexp.new('[' + server.mapped_chars + ']')){|v| server.special_characters[v]} unless server.mapped_chars.nil? || server.mapped_chars.empty?
       end
       ret
     end
