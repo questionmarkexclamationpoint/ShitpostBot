@@ -1,7 +1,7 @@
 module Discordrb
   class Channel
     attr_reader :config
-    alias :old_history :history
+    alias_method :old_history, :history
     remove_method :history
     
     old_initialize = instance_method(:initialize)
