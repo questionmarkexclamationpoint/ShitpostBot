@@ -66,7 +66,18 @@ module ShitpostBot
         text.gsub!(Regexp.new(' ' + pattern), '')
         text.gsub!(Regexp.new(pattern), '')
       end
+      CharacterMapping.each_regex do |regex|
+        text.gsub!(regex){|capture| message.channel.server.get_or_create_mapping(capture)}
+      end
       text.strip
+    end
+
+    def self.map_special_characters(text, server)
+      ret = nil
+      server.lock.synchronize do
+        ret = text.gsub(Regexp.new('[' + server.mapped_chars + ']')){|v| server.special_characters[v]}
+      end
+      ret
     end
 
     def self.format_messages(enumerator, with_tail = true)

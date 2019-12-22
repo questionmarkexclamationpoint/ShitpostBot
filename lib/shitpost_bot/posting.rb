@@ -10,10 +10,12 @@ module ShitpostBot
           stop_token: CharacterMapping::USER_SEPARATOR)
       response = response.force_encoding('UTF-8').partition(text)[2].strip
       response = response[0..-2] if response.end_with? CharacterMapping::USER_SEPARATOR
-      LOGGER.info("Posting in #{channel.full_name}:\n" +
-          "  Input: #{text}\n" +
-          "  Output: #{response}\n")
-      output = response.split(CharacterMapping::MESSAGE_SEPARATOR).reject(&:empty?)
+      LOGGER.info("Posting in #{channel.full_name}:\n" \
+          + "  Input: #{text}\n" \
+          + "  Output: #{response}\n")
+      output = Processing.map_special_characters(response, message.channel.server)
+          .split(CharacterMapping::MESSAGE_SEPARATOR)
+          .reject(&:empty?)
       STATS.posts_made += output.size
       output
     end

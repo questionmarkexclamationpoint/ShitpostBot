@@ -13,8 +13,6 @@ module ShitpostBot
       @default_settings[:off].each do |key, value|
         conf[key] = value
       end
-      conf[:special_characters] = Bihash.new
-      conf[:next_char] = CharacterMapping.next_char
       LOGGER.info "created a new config entry for channel #{id}"
 
       @channels[id]

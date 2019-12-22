@@ -5,7 +5,6 @@ require 'fileutils'
 require 'discordrb'
 require 'set'
 require 'chronic_duration'
-require 'bihash'
 
 module Kernel
   def run_suppressed(&block)
