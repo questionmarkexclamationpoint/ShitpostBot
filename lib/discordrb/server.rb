@@ -5,10 +5,8 @@ module Discordrb
     old_initialize = instance_method(:initialize)
     define_method(:initialize) do |data, bot, exists = true|
       old_initialize.bind(self).call(data, bot, exists)
-      if text?
-        @config = ShitpostBot::ServerConfig.load_config(@id)
-        @lock = Monitor.new
-      end
+      @config = ShitpostBot::ServerConfig.load_config(@id)
+      @lock = Monitor.new
       self
     end
 
