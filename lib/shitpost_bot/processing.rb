@@ -1,7 +1,13 @@
 module ShitpostBot
   module Processing
     def self.strip_missing_characters(text, present)
-      text.gsub(Regexp.new("[#{present.to_a.join}]"), '')
+      result =text
+      text.each_char do |char|
+        unless present.include?(char)
+          result.delete!(char)
+        end
+      end
+      result
     end
 
     def self.write_channels_to_file(channels, filename)
