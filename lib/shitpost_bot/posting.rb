@@ -14,7 +14,7 @@ module ShitpostBot
       LOGGER.info("Posting in #{channel.full_name}:\n" \
           + "  Input: #{text}\n" \
           + "  Output: #{response}\n")
-      output = Processing.map_special_characters(response, message.channel.server)
+      output = Processing.map_special_characters(response, channel.server)
           .split(CharacterMapping::MESSAGE_SEPARATOR)
           .reject(&:empty?)
       STATS.posts_made += output.size
