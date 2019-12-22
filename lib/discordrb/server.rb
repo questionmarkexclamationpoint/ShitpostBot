@@ -7,6 +7,7 @@ module Discordrb
       old_initialize.bind(self).call(data, bot, exists)
       @config = ShitpostBot::ServerConfig.load_config(@id)
       @lock = Monitor.new
+      create_methods
       self
     end
 
