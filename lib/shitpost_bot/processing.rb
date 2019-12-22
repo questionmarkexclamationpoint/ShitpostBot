@@ -78,7 +78,7 @@ module ShitpostBot
     def self.map_special_characters(text, server)
       ret = nil
       server.lock.synchronize do
-        ret = text.gsub(Regexp.new('[' + server.mapped_chars + ']')){|v| server.special_characters[v]}
+        ret = server.mapped_chars.empty? ? ret : text.gsub(Regexp.new('[' + server.mapped_chars + ']')){|v| server.special_characters[v]}
       end
       ret
     end
