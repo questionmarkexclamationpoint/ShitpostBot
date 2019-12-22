@@ -27,38 +27,9 @@ module ShitpostBot
               File.rename(filename, filename + '.bak') if File.exist?(filename)
             end
             begin
-              last_message = nil
-              json_file = File.open(json, 'w')
-              yaml_file = File.open(yaml, 'w')
-              txt_file = File.open(txt, 'w')
-              json_file << '['
-              yaml_file << '---'
-              txt_file << CharacterMapping::MESSAGE_SEPARATOR
-              channel.each_message(true) do |message|
-                next if message.content.empty?
-                is_new_user = last_message.nil? || last_message.user.id != message.user.id
-                #json
-                json_file << message.to_json + ','
-                #yml -- manually formatting here
-                pre = is_new_user ? '- ' : '  '
-                pre += message.content.include?("\n") ? "- |-\n  " : '- '
-                yaml_file << "\n" + pre + message.content.lines.map{ |l| '    ' + l }.join
-                #txt
-                proc = Processing.format_message(message)
-                unless proc.empty?
-                  txt_file << CharacterMapping::USER_SEPARATOR if is_new_user
-                  txt_file << proc + CharacterMapping::MESSAGE_SEPARATOR
-                end
-                last_message = message
-              end
-              json_file.pos -= 1
-              json_file << ']'
-              yaml_file << '[]' if last_message.nil?
-              yaml_file << "\n"
-              txt_file << CharacterMapping::USER_SEPARATOR
-              json_file.close
-              yaml_file.close
-              txt_file.close
+              Processing.write_channels_to_file([channel], txt)
+              Processing.json_write_channels_to_file([channel], json)
+              Processing.yaml_write_channels_to_file([channel], yaml)
             rescue Exception => e
               event.channel.send_message("Exception encountered on #{channel.full_name}, skipping.\n"\
                   + "Exception was:\n"\

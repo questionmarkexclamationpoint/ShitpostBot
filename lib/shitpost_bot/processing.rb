@@ -1,48 +1,43 @@
 module ShitpostBot
   module Processing
     def self.strip_missing_characters(text, present)
-      result = text
-      text.each_char do |char|
-        unless present.include?(char)
-          result.delete!(char)
-        end
-      end
-      result
+      text.gsub(Regexp.new('[present.to_a.join]'), '')
     end
 
     def self.write_channels_to_file(channels, filename)
-      history = []
-      channels.each do |channel|
-        history += channel.full_history
-      end
-      #outputing straight to the file, rather than processing the string and then outputing.
-      #this is because appending to the file is *much* faster than appending to a string for very long strings.
       File.open(filename, 'w') do |file|
-        last_message = history.first
-      #np = message.channel.symbols[:new_post]
-      #nu = message.channel.symbols[:new_user]
-        history.each do |message|
-          content = format_message(message)
-          unless content.empty?
-            #file << np
-            #file << nu unless last_message.user == message.user
-            file << CharacterMapping::MESSAGE_SEPARATOR
-            file << CharacterMapping::USER_SEPARATOR unless last_message.user == message.user
-            file << content
-            last_message = message
-          end
+        channels[0..-2].each do |channel|
+          file << format_messages(channel.each_message)
         end
-        file << CharacterMapping::MESSAGE_SEPARATOR + CharacterMapping::USER_SEPARATOR
+        file << format_messages(channels.last.each_message, true)
       end
     end
 
-    def self.full_write_channels_to_file(channels, filename)
-      history = []
-      channels.each do |channel|
-        history += channel.full_history
-      end
+    def self.json_write_channels_to_file(channels, filename)
       File.open(filename, 'w') do |file|
-        f << JSON.dump(history)
+        file << "[\n"
+        channels.each do |channel|
+          channel.each_message do |message|
+            file << JSON.dump(message) << ",\n"
+          end
+        end
+        file << "]"
+      end
+    end
+
+    def self.yaml_write_channels_to_file(channels, filename)
+      File.open(filename, 'w') do |file|
+        file << '---'
+        last_poster = nil
+        channels.each do |channel|
+          channel.each_message do |message|
+            next if message.content.empty?
+            pre = message.user == last_poster ? '- ' : '  '
+            pre += message.content.include?("\n") ? "- |-\n  " : '- '
+            yaml_file << "\n" + pre + message.content.lines.map{|l| '    ' + l}.join
+            last_poster = message.user
+          end
+        end
       end
     end
 
@@ -51,9 +46,9 @@ module ShitpostBot
       channels.length.times do |i|
         channels[i] = ShitpostBot::BOT.channel(channels[i][2..-2].to_i, event.server)
         if channels[i].nil?
-          BOT.send_message(home_channel, 'You\'ve given a non-existant channel.')
+          BOT.send_message(home_channel, 'You\'ve given a nonexistent channel.')
           return []
-        elsif channels[i].voice?
+        elsif channels[i].voice? || channels[i].category?
           BOT.send_message(home_channel, 'This command only works with text channels.')
           return []
         end
@@ -61,34 +56,32 @@ module ShitpostBot
       channels
     end
 
-    def self.format_message(message, is_response = false)
-      return '' if (message.from_bot? && !is_response) ||
-                   message.content[0] == ShitpostBot::BOT.prefix ||
-                   message.content =~ /\bhttp(s?):\/\/[^ ]+\b/ ||
-                   message.content == ''
+    def self.format_message(message)
+      return '' if message.from_bot? ||
+          message.content[0] == ShitpostBot::BOT.prefix ||
+          message.content == ''
       text = message.content
       ShitpostBot::CONFIG.ignored_patterns.each do |pattern|
         text.gsub!(Regexp.new(pattern + ' '), '')
         text.gsub!(Regexp.new(' ' + pattern), '')
         text.gsub!(Regexp.new(pattern), '')
       end
-      text.chomp
+      text.strip
     end
 
-    def self.format_messages(messages, is_response = false)
-      text = ''
-      last_message = messages.first
-      messages.each do |message|
-          content = format_message(message, is_response)
-          unless content.empty?
-            text += CharacterMapping::MESSAGE_SEPARATOR
-            text += CharacterMapping::USER_SEPARATOR unless last_message.user == message.user
-            text += content
-            last_message = message
-          end
+    def self.format_messages(enumerator, with_tail = true)
+      return to_enum(:format_messages, enumerator, with_tail) unless block_given?
+      last_poster = nil
+      non_zero = false
+      enumerator.each do |message|
+        non_zero = true
+        content = format_message(message)
+        unless content.empty?
+          yield "#{CharacterMapping::MESSAGE_SEPARATOR}#{last_poster == message.user ? '' : CharacterMapping::USER_SEPARATOR}#{content}"
+          last_poster = message.user
+        end
       end
-      text += CharacterMapping::MESSAGE_SEPARATOR + CharacterMapping::USER_SEPARATOR
-      text
+      yield (CharacterMapping::MESSAGE_SEPARATOR + CharacterMapping::USER_SEPARATOR) if with_tail && non_zero
     end
   end
 end

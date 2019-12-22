@@ -29,7 +29,7 @@ module ShitpostBot
       end
     end
 
-    def self.next_char(curr)
+    def self.next_char(curr = '')
       ENCODING_CHARACTERS.each do |range|
         return range.min if curr < range.min
         return curr.succ if curr < range.max

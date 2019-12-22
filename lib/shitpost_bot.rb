@@ -5,9 +5,10 @@ require 'fileutils'
 require 'discordrb'
 require 'set'
 require 'chronic_duration'
+require 'bihash'
 
 module Kernel
-  def run_supressed(&block)
+  def run_suppressed(&block)
     original_verbosity = $VERBOSE
     $VERBOSE = nil
     yield block
@@ -16,7 +17,7 @@ module Kernel
 end
 
 module ShitpostBot
-  run_supressed { Discordrb::LOG_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S' }
+  run_suppressed { Discordrb::LOG_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S' }
 
   debug = ARGV.include?('-debug') ? :debug : false
   log_streams = [STDOUT]
@@ -27,7 +28,7 @@ module ShitpostBot
     log_streams.push(log_file)
   end
 
-  run_supressed { LOGGER = Discordrb::LOGGER = Discordrb::Logger.new(nil, log_streams) }
+  run_suppressed { LOGGER = Discordrb::LOGGER = Discordrb::Logger.new(nil, log_streams) }
 
   LOGGER.debug = true if debug
   require_relative 'shitpost_bot/store_data'

@@ -8,17 +8,20 @@ module ShitpostBot
     def self.load_config(id)
       return @channels[id] if @channels.key?(id)
 
-      @channels[id] = {}
+      conf = {}
+      @channels[id] = conf
       @default_settings[:off].each do |key, value|
-        @channels[id][key] = value
+        conf[key] = value
       end
-      LOGGER.debug "created a new config entry for channel #{id}"
+      conf[:special_characters] = Bihash.new
+      conf[:next_char] = CharacterMapping.next_char
+      LOGGER.info "created a new config entry for channel #{id}"
 
       @channels[id]
     end
 
     def self.save
-      LOGGER.debug 'Saving channel config'
+      LOGGER.info 'Saving channel config'
       save_to_file("#{Dir.pwd}/data/channel_config.yml", @channels) unless @channels.empty?
     end
     
