@@ -32,7 +32,7 @@ module ShitpostBot
     end
 
     def save
-      LOGGER.info 'Saving stats'
+      LOGGER.debug 'Saving stats'
       save_to_file(@file, @stats)
     end
 

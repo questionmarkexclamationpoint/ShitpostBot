@@ -19,7 +19,7 @@ module ShitpostBot
     end
 
     def self.save
-      LOGGER.info 'Saving server config'
+      LOGGER.debug 'Saving server config'
       save_to_file("#{Dir.pwd}/data/server_config.yml", @servers) unless @servers.empty?
     end
   end

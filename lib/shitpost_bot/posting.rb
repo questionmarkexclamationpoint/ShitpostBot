@@ -1,7 +1,6 @@
 module ShitpostBot
   module Posting
     def self.get_reply(text, channel)
-      puts channel.valid_characters.to_a.join('')
       text = Processing.strip_missing_characters(text, channel.valid_characters)
       response = TorchRnn.sample(checkpoint: "#{Dir.pwd}/data/checkpoints/#{channel.checkpoint}/#{channel.checkpoint}.t7",
           start_text: text,

@@ -19,7 +19,7 @@ module ShitpostBot
     end
 
     def self.save
-      LOGGER.info 'Saving channel config'
+      LOGGER.debug 'Saving channel config'
       save_to_file("#{Dir.pwd}/data/channel_config.yml", @channels) unless @channels.empty?
     end
     
