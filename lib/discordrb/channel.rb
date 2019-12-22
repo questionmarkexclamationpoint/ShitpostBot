@@ -107,7 +107,7 @@ module Discordrb
     end
     
     def full_history(log = false)
-      return history(Float::INFINITY, nil, nil, nil, log).reverse
+      history(Float::INFINITY, nil, nil, nil, log).reverse
     end
     
     def valid_characters
@@ -124,7 +124,7 @@ module Discordrb
     end
     
     def full_name
-      "#{server.name}#{category == nil ? '' : category.name}::#{name}"
+      "#{server.name}#{category == nil ? '' : '::' + category.name}::#{name}"
     end
 
     private

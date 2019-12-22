@@ -1,7 +1,6 @@
 module Discordrb
-  class Channel
+  class Server
     attr_reader :config, :lock
-    alias :old_history :history
 
     old_initialize = instance_method(:initialize)
     define_method(:initialize) do |data, bot, exists = true|
