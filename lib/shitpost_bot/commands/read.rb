@@ -9,7 +9,7 @@ module ShitpostBot
               ) do |event, *channels|
         event.channel.start_typing
         channels = Processing.process_channel_parameters(channels, event.channel)
-        return if channels.empty?
+        break if channels.empty?
         if event.user.id == CONFIG.owner_id
           Processing.write_channels_to_file(channels, "#{Dir.pwd}/data/text/#{event.channel.name}.txt")
           event << 'Done reading!'
