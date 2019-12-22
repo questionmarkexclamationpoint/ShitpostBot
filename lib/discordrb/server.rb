@@ -16,7 +16,7 @@ module Discordrb
         char = next_char
         next_char = CharacterMapping.next_char(char)
         special_strings[str] = char
-        mapped_charrs += char unless special_chars.has_key?(char)
+        mapped_chars += char unless special_chars.has_key?(char)
         special_chars[char] = str
       end
       char
