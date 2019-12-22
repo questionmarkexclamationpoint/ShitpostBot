@@ -34,7 +34,7 @@ module ShitpostBot
             next if message.content.empty?
             pre = message.user == last_poster ? '- ' : '  '
             pre += message.content.include?("\n") ? "- |-\n  " : '- '
-            yaml_file << "\n" + pre + message.content.lines.map{|l| '    ' + l}.join
+            file << "\n" + pre + message.content.lines.map{|l| '    ' + l}.join
             last_poster = message.user
           end
         end
