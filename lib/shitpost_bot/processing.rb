@@ -13,7 +13,7 @@ module ShitpostBot
     def self.write_channels_to_file(channels, filename)
       File.open(filename, 'w') do |file|
         channels[0..-2].each do |channel|
-          file << format_messages(channel.each_message(true))
+          file << format_messages(channel.each_message)
         end
         file << format_messages(channels.last.each_message(true), true)
       end
@@ -23,7 +23,7 @@ module ShitpostBot
       File.open(filename, 'w') do |file|
         file << "[\n"
         channels.each do |channel|
-          channel.each_message(true) do |message|
+          channel.each_message do |message|
             file << JSON.dump(message) << ",\n"
           end
         end
@@ -36,7 +36,7 @@ module ShitpostBot
         file << '---'
         last_poster = nil
         channels.each do |channel|
-          channel.each_message(true) do |message|
+          channel.each_message do |message|
             next if message.content.empty?
             pre = message.user == last_poster ? '- ' : '  '
             pre += message.content.include?("\n") ? "- |-\n  " : '- '
