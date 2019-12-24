@@ -15,7 +15,7 @@ module ShitpostBot
         channels[0..-2].each do |channel|
           file << format_messages(channel.each_message)
         end
-        file << format_messages(channels.last.each_message(true), true)
+        file << format_messages(channels.last.each_message(true), with_tail: true)
       end
     end
 
@@ -62,8 +62,8 @@ module ShitpostBot
       channels
     end
 
-    def self.format_message(message)
-      return '' if message.from_bot? ||
+    def self.format_message(message, with_bot = false)
+      return '' if (message.from_bot? && ! with_bot) ||
           message.content[0] == ShitpostBot::BOT.prefix ||
           message.content == ''
       text = message.content
@@ -84,13 +84,13 @@ module ShitpostBot
       ret
     end
 
-    def self.format_messages(enumerator, with_tail = true)
+    def self.format_messages(enumerator, with_tail: true, with_bot: false)
       return to_enum(:format_messages, enumerator, with_tail) unless block_given?
       last_poster = nil
       non_zero = false
       enumerator.each do |message|
         non_zero = true
-        content = format_message(message)
+        content = format_message(message, with_bot)
         unless content.empty?
           yield "#{CharacterMapping::MESSAGE_SEPARATOR}#{last_poster == message.user ? '' : CharacterMapping::USER_SEPARATOR}#{content}"
           last_poster = message.user
