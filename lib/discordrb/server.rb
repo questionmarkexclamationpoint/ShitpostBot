@@ -17,8 +17,8 @@ module Discordrb
         char = next_char
         next_char = ShitpostBot::CharacterMapping.next_char(char)
         special_strings[str] = char
-        mapped_chars += char unless special_chars.has_key?(char)
-        special_chars[char] = str
+        mapped_chars += char unless special_characters.has_key?(char)
+        special_characters[char] = str
       end
       char
     end
