@@ -14,11 +14,11 @@ module Discordrb
     def get_or_create_mapping(str)
       char = nil
       @lock.synchronize do
-        char = next_char
-        next_char = ShitpostBot::CharacterMapping.next_char(char)
-        special_strings[str] = char
-        mapped_chars += char unless special_characters.has_key?(char)
-        special_characters[char] = str
+        char = self.next_character
+        self.next_character = ShitpostBot::CharacterMapping.next_char(char)
+        self.special_strings[str] = char
+        self.mapped_characters += char unless self.special_characters.has_key?(char)
+        self.special_characters[char] = str
       end
       char
     end

@@ -11,8 +11,8 @@ module ShitpostBot
       @servers[id] = conf
       conf[:special_characters] = {}
       conf[:special_strings] = {}
-      conf[:mapped_chars] = ''
-      conf[:next_char] = CharacterMapping.next_char
+      conf[:mapped_characters] = ''
+      conf[:next_character] = CharacterMapping.next_char
       LOGGER.info "created a new config entry for server #{id}"
 
       @servers[id]
