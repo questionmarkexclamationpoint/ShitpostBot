@@ -15,7 +15,7 @@ module Discordrb
       char = nil
       @lock.synchronize do
         char = next_char
-        next_char = CharacterMapping.next_char(char)
+        next_char = ShitpostBot::CharacterMapping.next_char(char)
         special_strings[str] = char
         mapped_chars += char unless special_chars.has_key?(char)
         special_chars[char] = str
