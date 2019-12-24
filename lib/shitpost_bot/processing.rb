@@ -85,7 +85,7 @@ module ShitpostBot
     end
 
     def self.format_messages(enumerator, with_tail: true, with_bot: false)
-      return to_enum(:format_messages, enumerator, with_tail) unless block_given?
+      return to_enum(:format_messages, enumerator, with_tail: with_tail, with_bot: with_bot) unless block_given?
       last_poster = nil
       non_zero = false
       enumerator.each do |message|
