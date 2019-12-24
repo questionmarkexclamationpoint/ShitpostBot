@@ -63,7 +63,7 @@ module ShitpostBot
     LOGGER.info 'Saving files before exiting...'
     STATS.save
     ChannelConfig.save
-    #ChannelSymbols.save
+    ServerConfig.save
     exit!
   end
   
