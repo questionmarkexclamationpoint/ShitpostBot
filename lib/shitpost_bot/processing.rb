@@ -63,10 +63,11 @@ module ShitpostBot
     end
 
     def self.format_message(message, with_bot = false)
-      return '' if (message.from_bot? && ! with_bot) ||
-          message.content[0] == ShitpostBot::BOT.prefix ||
-          message.content == ''
       text = message.content
+      text = text[BOT.profile.mention.length..-1].lstrip if text.start_with?(BOT.profile.mention)
+      return '' if (message.from_bot? && ! with_bot) ||
+          text[0] == ShitpostBot::BOT.prefix ||
+          text == ''
       ShitpostBot::CONFIG.ignored_patterns.each do |pattern|
         text.gsub!(Regexp.new(pattern + ' '), '')
         text.gsub!(Regexp.new(' ' + pattern), '')
