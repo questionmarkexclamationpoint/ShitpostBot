@@ -10,7 +10,7 @@ module ShitpostBot
           start_text = start_text[-500..-1] if start_text.length > 500
           reply = Posting.get_reply(start_text, event.channel)
           reply.each do |r|
-            event << r unless r.empty?
+            event.channel.send_message(r) unless r.empty?
           end
           nil
         end

@@ -8,8 +8,8 @@ module ShitpostBot
             if rand < channel.think
               channel.start_typing
               post = Posting.get_reply(
-                "#{CharacterMapping::MESSAGE_SEPARATOR}#{CharacterMapping::USER_SEPARATOR}", 
-                channel
+                  "#{CharacterMapping::MESSAGE_SEPARATOR}#{CharacterMapping::USER_SEPARATOR}",
+                  channel
               )
               post.each do |p|
                 channel.send_message(p) unless p.empty?
