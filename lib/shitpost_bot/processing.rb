@@ -13,9 +13,13 @@ module ShitpostBot
     def self.write_channels_to_file(channels, filename)
       File.open(filename, 'w') do |file|
         channels[0..-2].each do |channel|
-          file << format_messages(channel.each_message)
+          format_messages(channel.each_message(true)) do |message|
+            file << message
+          end
         end
-        file << format_messages(channels.last.each_message(true), with_tail: true)
+        format_messages(channels.last.each_message(true), with_tail: true) do |message|
+          file << message
+        end
       end
     end
 
