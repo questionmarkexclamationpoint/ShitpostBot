@@ -8,8 +8,7 @@ module ShitpostBot
           gpu: CONFIG.gpu,
           gpu_backend: CONFIG.gpu_backend,
           stop_token: CharacterMapping::USER_SEPARATOR)
-      response = response.force_encoding('UTF-8').partition(text)[2].rstrip
-      response = response[0..-2] if response.end_with? CharacterMapping::USER_SEPARATOR
+      response = response.force_encoding('UTF-8').partition(text)[2].partition(CharacterMapping::USER_SEPARATOR)[0].rstrip
       LOGGER.info("Posting in #{channel.full_name}:\n" \
           + "  Input: #{text}\n" \
           + "  Output: #{response}\n")
